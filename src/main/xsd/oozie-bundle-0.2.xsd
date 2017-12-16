@@ -16,8 +16,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bundle="uri:oozie:bundle"
-           elementFormDefault="qualified" targetNamespace="uri:oozie:bundle">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bundle="uri:oozie:bundle:0.2"
+           elementFormDefault="qualified" targetNamespace="uri:oozie:bundle:0.2">
 
     <xs:element name="bundle-app" type="bundle:BUNDLE-APP"/>
     <xs:simpleType name="IDENTIFIER">

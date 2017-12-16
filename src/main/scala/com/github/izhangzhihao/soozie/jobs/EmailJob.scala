@@ -1,7 +1,7 @@
 package com.github.izhangzhihao.soozie.jobs
 
 import com.github.izhangzhihao.soozie.dsl.Job
-import oozie.emailaction._
+import oozie.email._
 
 import scalaxb.DataRecord
 

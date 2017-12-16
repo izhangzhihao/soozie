@@ -17,13 +17,13 @@
   limitations under the License.
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           xmlns:ssh="uri:oozie:ssh-action" elementFormDefault="qualified"
-           targetNamespace="uri:oozie:ssh-action">
+           xmlns:ssh="uri:oozie:ssh-action:0.2" elementFormDefault="qualified"
+           targetNamespace="uri:oozie:ssh-action:0.2">
 
     <xs:element name="ssh" type="ssh:ACTION"/>
 
     <xs:complexType name="ACTION">
-        <xs:attribute name="xmlns" type="xs:string" fixed="uri:oozie:ssh-action"/>
+        <xs:attribute name="xmlns" type="xs:string" fixed="uri:oozie:ssh-action:0.2"/>
         <xs:sequence>
             <xs:element name="host" type="xs:string" minOccurs="1" maxOccurs="1"/>
             <xs:element name="command" type="xs:string" minOccurs="1" maxOccurs="1"/>

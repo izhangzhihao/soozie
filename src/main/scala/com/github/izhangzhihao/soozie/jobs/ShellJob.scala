@@ -2,7 +2,7 @@ package com.github.izhangzhihao.soozie.jobs
 
 import com.github.izhangzhihao.soozie.dsl.{ConfigBuilder, ConfigurationList, Job}
 import com.github.izhangzhihao.soozie.utils.WriterUtils
-import oozie.shellaction._
+import oozie.shell._
 
 import scalaxb.DataRecord
 

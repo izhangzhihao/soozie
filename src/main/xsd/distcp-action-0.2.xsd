@@ -7,7 +7,9 @@
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
+  
        http://www.apache.org/licenses/LICENSE-2.0
+  
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,25 +17,19 @@
   limitations under the License.
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           xmlns:spark="uri:oozie:spark-action" elementFormDefault="qualified"
-           targetNamespace="uri:oozie:spark-action">
+           xmlns:distcp="uri:oozie:distcp-action:0.2" elementFormDefault="qualified"
+           targetNamespace="uri:oozie:distcp-action:0.2">
 
-    <xs:element name="spark" type="spark:ACTION"/>
+    <xs:element name="distcp" type="distcp:ACTION"/>
 
     <xs:complexType name="ACTION">
-        <xs:attribute name="xmlns" type="xs:string" fixed="uri:oozie:spark-action"/>
+        <xs:attribute name="xmlns" type="xs:string" fixed="uri:oozie:distcp-action:0.2"/>
         <xs:sequence>
-            <xs:element name="job-tracker" type="xs:string" minOccurs="1" maxOccurs="1"/>
-            <xs:element name="name-node" type="xs:string" minOccurs="1" maxOccurs="1"/>
-            <xs:element name="prepare" type="spark:PREPARE" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="job-xml" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="configuration" type="spark:CONFIGURATION" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="master" type="xs:string" minOccurs="1" maxOccurs="1"/>
-            <xs:element name="mode" type="xs:string" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
-            <xs:element name="class" type="xs:string" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="jar" type="xs:string" minOccurs="1" maxOccurs="1"/>
-            <xs:element name="spark-opts" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="job-tracker" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="name-node" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="prepare" type="distcp:PREPARE" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="configuration" type="distcp:CONFIGURATION" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="java-opts" type="xs:string" minOccurs="0" maxOccurs="1"/>
             <xs:element name="arg" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
@@ -54,8 +50,8 @@
 
     <xs:complexType name="PREPARE">
         <xs:sequence>
-            <xs:element name="delete" type="spark:DELETE" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="mkdir" type="spark:MKDIR" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="delete" type="distcp:DELETE" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="mkdir" type="distcp:MKDIR" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 

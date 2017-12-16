@@ -17,13 +17,13 @@
   limitations under the License.
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           xmlns:sla="uri:oozie:sla" elementFormDefault="qualified"
-           targetNamespace="uri:oozie:sla">
+           xmlns:sla="uri:oozie:sla:0.2" elementFormDefault="qualified"
+           targetNamespace="uri:oozie:sla:0.2">
 
     <xs:element name="info" type="sla:SLA-INFO"/>
 
     <xs:complexType name="SLA-INFO">
-        <xs:attribute name="xmlns" type="xs:string" fixed="uri:oozie:sla"/>
+        <xs:attribute name="xmlns" type="xs:string" fixed="uri:oozie:sla:0.2"/>
         <xs:sequence>
             <xs:element name="nominal-time" type="xs:string" minOccurs="1"
                         maxOccurs="1"/>

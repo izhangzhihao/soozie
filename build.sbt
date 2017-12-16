@@ -50,27 +50,25 @@ lazy val root = (project in file(".")).
     name := "soozie",
     organization := "com.github.izhangzhihao.soozie",
     scalaVersion := "2.12.4",
-    scalaxbAutoPackages in(Compile, scalaxb) := true,
-    scalaxbPackageName in(Compile, scalaxb) := "oozie",
     scalaxbPackageNames in(Compile, scalaxb) := Map(
-      uri("uri:oozie:workflow") -> s"$rootFolder.workflow",
-      uri("uri:oozie:hive-action") -> s"$rootFolder.hive",
-      uri("uri:oozie:shell-action") -> s"$rootFolder.shell",
-      uri("uri:oozie:distcp-action") -> s"$rootFolder.distcp",
-      uri("uri:oozie:email-action") -> s"$rootFolder.email",
-      uri("uri:oozie:sla") -> s"$rootFolder.sla",
-      uri("uri:oozie:spark-action") -> s"$rootFolder.spark",
-      uri("uri:oozie:sqoop-action") -> s"$rootFolder.sqoop",
-      uri("uri:oozie:ssh-action") -> s"$rootFolder.ssh",
-      uri("uri:oozie:coordinator") -> s"$rootFolder.coordinator",
-      uri("uri:oozie:bundle") -> s"$rootFolder.bundle"
-    ),
-    scalaxbAsync in(Compile, scalaxb) := true,
+      uri("uri:oozie:workflow:0.5") -> s"$rootFolder.workflow",
+      uri("uri:oozie:hive-action:0.5") -> s"$rootFolder.hive",
+      uri("uri:oozie:shell-action:0.3") -> s"$rootFolder.shell",
+      uri("uri:oozie:distcp-action:0.2") -> s"$rootFolder.distcp",
+      uri("uri:oozie:email-action:0.2") -> s"$rootFolder.email",
+      uri("uri:oozie:sla:0.2") -> s"$rootFolder.sla",
+      uri("uri:oozie:spark-action:0.1") -> s"$rootFolder.spark",
+      uri("uri:oozie:sqoop-action:0.4") -> s"$rootFolder.sqoop",
+      uri("uri:oozie:ssh-action:0.2") -> s"$rootFolder.ssh",
+      uri("uri:oozie:coordinator:0.4") -> s"$rootFolder.coordinator",
+      uri("uri:oozie:bundle:0.2") -> s"$rootFolder.bundle"
+    )
   )
 
 scalacOptions ++= Seq(
   "-unchecked",
   "-feature",
+  "-deprecation",
   "-language:existentials",
   "-language:postfixOps",
   "-language:implicitConversions",

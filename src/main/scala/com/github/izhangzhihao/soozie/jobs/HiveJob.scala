@@ -1,7 +1,7 @@
 package com.github.izhangzhihao.soozie.jobs
 
 import com.github.izhangzhihao.soozie.dsl.{ConfigBuilder, ConfigurationList, Job}
-import oozie.hiveaction._
+import oozie.hive._
 
 import scalaxb._
 import oozie._

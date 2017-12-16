@@ -17,13 +17,13 @@
   limitations under the License.
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           xmlns:email="uri:oozie:email-action" elementFormDefault="qualified"
-           targetNamespace="uri:oozie:email-action">
+           xmlns:email="uri:oozie:email-action:0.2" elementFormDefault="qualified"
+           targetNamespace="uri:oozie:email-action:0.2">
 
     <xs:element name="email" type="email:ACTION"/>
 
     <xs:complexType name="ACTION">
-        <xs:attribute name="xmlns" type="xs:string" fixed="uri:oozie:email-action"/>
+        <xs:attribute name="xmlns" type="xs:string" fixed="uri:oozie:email-action:0.2"/>
         <xs:sequence>
             <xs:element name="to" type="xs:string" minOccurs="1" maxOccurs="1"/>
             <xs:element name="cc" type="xs:string" minOccurs="0" maxOccurs="1"/>

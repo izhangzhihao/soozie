@@ -1,4 +1,4 @@
-soozie
+Soozie
 =======
 
 Yet another Scala DSL for Oozie
@@ -23,12 +23,6 @@ Problems that Soozie solves:
 5. Multiple sources of truth: The Soozie specification of a job will
    be the source of truth for any workflow
 
-
-Version:
--------------
-As of version 0.5.6, Soozie has been upgraded to cdh5.3.3. Please depend on an earlier Soozie version to support lower versions of CDH libraries.
-
-
 How it works:
 -------------
 
@@ -41,25 +35,24 @@ There are three main layers to Soozie:
     ```scala
     val job1 = JobType(params) dependsOn Start
     val job2 = JobType(params) dependsOn job2
-    val job3 = JobType(params) dependsOn job3, etc
+    val job3 = JobType(params) dependsOn job3
     ```
 
     This is the code that a workflow developer will actually be writing.
     The intent is to make it easy to read and to see the dependency path
     between jobs. Soozie will automatically figure out forks/joins, etc.
-    Specific samples of this can be found in src/main/scala/samples.scala
 
-2. Logic / conversion from DSL spec to workflow graph.  This is the real
+2. Logic / conversion from DSL spec to workflow graph. This is the real
    workhorse of Soozie, as it converts the programmer-specified workflow
    into an intermediate graph of workflow nodes. Forks, joins, and
    decisions are figured out and made ready for the final step - conversion
-   to XML.  This step also includes verification on the result graph.
+   to XML. This step also includes verification on the result graph.
 
-3. Conversion from intermediate graph to XML.  This step makes use of
+3. Conversion from intermediate graph to XML. This step makes use of
    scalaxb, an XML data-binding tool for scala. In this step each node in
    the intermediate graph is converted to an oozie-specific type. Finally,
    these nodes are converted to XML.  This XML can be run in oozie by a
-   scala command, examples of which can be found in src/main/scala/runSamples.scala
+   scala command.
 
 
 DSL Class Structure:

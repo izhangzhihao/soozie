@@ -15,27 +15,29 @@
   limitations under the License.
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           xmlns:sqoop="uri:oozie:sqoop-action" elementFormDefault="qualified"
-           targetNamespace="uri:oozie:sqoop-action">
+           xmlns:shell="uri:oozie:shell-action:0.3" elementFormDefault="qualified"
+           targetNamespace="uri:oozie:shell-action:0.3">
 
-    <xs:element name="sqoop" type="sqoop:ACTION"/>
+    <xs:element name="shell" type="shell:ACTION"/>
 
     <xs:complexType name="ACTION">
-        <xs:attribute name="xmlns" type="xs:string" fixed="uri:oozie:sqoop-action"/>
+        <xs:attribute name="xmlns" type="xs:string" fixed="uri:oozie:shell-action:0.3"/>
         <xs:sequence>
             <xs:element name="job-tracker" type="xs:string" minOccurs="0" maxOccurs="1"/>
             <xs:element name="name-node" type="xs:string" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="prepare" type="sqoop:PREPARE" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="prepare" type="shell:PREPARE" minOccurs="0" maxOccurs="1"/>
             <xs:element name="job-xml" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="configuration" type="sqoop:CONFIGURATION" minOccurs="0" maxOccurs="1"/>
-            <xs:choice>
-                <xs:element name="command" type="xs:string" minOccurs="1" maxOccurs="1"/>
-                <xs:element name="arg" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
-            </xs:choice>
+            <xs:element name="configuration" type="shell:CONFIGURATION" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="exec" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="argument" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="env-var" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="file" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="archive" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="capture-output" type="shell:FLAG" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
     </xs:complexType>
+
+    <xs:complexType name="FLAG"/>
 
     <xs:complexType name="CONFIGURATION">
         <xs:sequence>
@@ -53,8 +55,8 @@
 
     <xs:complexType name="PREPARE">
         <xs:sequence>
-            <xs:element name="delete" type="sqoop:DELETE" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="mkdir" type="sqoop:MKDIR" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="delete" type="shell:DELETE" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="mkdir" type="shell:MKDIR" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 
