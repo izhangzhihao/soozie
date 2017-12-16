@@ -25,10 +25,6 @@ object WriterUtils {
 
   def withXmlExtension(name: String): String = s"$name.${ScoozieConfig.xmlExtension}"
 
-  def addRootSubstitutionToPath(path: String) = "${" + ScoozieConfig.rootFolderParameterName + "}" + path
-
-  def buildPathPropertyName(name: String) = s"${name.replace("-", "_")}_path"
-
   def generateXml[A: CanWriteXML](xmlObject: A,
                                   scope: String,
                                   namespace: String,
@@ -45,7 +41,7 @@ object WriterUtils {
     val formattedXml = prettyPrinter.formatNodes(input)
     val processedXml = postProcessing match {
       case Some(proccessingRules) =>
-        (formattedXml /: proccessingRules.substitutions) ((str, mapping) => str replace (mapping._1, mapping._2))
+        (formattedXml /: proccessingRules.substitutions) ((str, mapping) => str replace(mapping._1, mapping._2))
       case _ => formattedXml
     }
     processedXml
@@ -59,6 +55,11 @@ object WriterUtils {
     assertion = path.isDefined,
     message = s"A path was not defined for the following $applicationType: $applicationName")
 
+  def getShellActionProperties(workflow: Workflow[_]) = findShellActions(workflow)
+    .map(descriptor =>
+      createPathProperty(descriptor.name, ScoozieConfig.scriptFolderName, ScoozieConfig.scriptExtension))
+    .toMap
+
   def createPathProperty(name: String, folderName: String, extension: String = ScoozieConfig.xmlExtension): (String, String) = {
     val fileName = s"$name.$extension"
     val substitutedPath = addRootSubstitutionToPath(s"/$folderName/$fileName")
@@ -66,15 +67,14 @@ object WriterUtils {
     buildPathPropertyName(name) -> substitutedPath
   }
 
+  def addRootSubstitutionToPath(path: String) = "${" + ScoozieConfig.rootFolderParameterName + "}" + path
+
+  def buildPathPropertyName(name: String) = s"${name.replace("-", "_")}_path"
+
   def findShellActions(workflow: Workflow[_]): List[ShellScriptDescriptor] =
     Flatten(workflow).toList
-      .map{ case (dependency, _) => dependency.value }
-      .collect{ case x: Node => x.work }
-      .collect{ case x: ShellJob[_] => x.descriptor }
+      .map { case (dependency, _) => dependency.value }
+      .collect { case x: Node => x.work }
+      .collect { case x: ShellJob[_] => x.descriptor }
       .flatten
-
-  def getShellActionProperties(workflow: Workflow[_]) = findShellActions(workflow)
-    .map(descriptor =>
-      createPathProperty(descriptor.name, ScoozieConfig.scriptFolderName, ScoozieConfig.scriptExtension))
-    .toMap
 }

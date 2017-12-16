@@ -1,6 +1,6 @@
 package com.github.izhangzhihao.soozie.writer
 
-import java.io.{ File, PrintWriter }
+import java.io.{File, PrintWriter}
 
 import scala.util.Try
 

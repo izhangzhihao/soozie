@@ -6,7 +6,7 @@ import com.github.izhangzhihao.soozie.dsl.Predicates
 import com.github.izhangzhihao.soozie.dsl._
 import com.github.izhangzhihao.soozie.utils.WriterUtils
 import com.github.izhangzhihao.soozie.verification.Verification
-import org.joda.time.{ DateTimeZone, DateTime }
+import org.joda.time.{DateTimeZone, DateTime}
 import scalaxb._
 
 case class PartiallyOrderedNode(node: GraphNode,
@@ -26,16 +26,6 @@ case class GraphNode(var name: String,
                      var decisionAfter: RefSet[GraphNode] = RefSet(),
                      var decisionRoutes: Set[(String, DecisionNode)] = Set.empty,
                      var errorTo: Option[GraphNode] = None) {
-
-  def getName(n: GraphNode) = n.name
-
-  def beforeNames = before map getName _
-
-  def afterNames = after map getName _
-
-  def decisionBeforeNames = decisionBefore map getName _
-
-  def decisionAfterNames = decisionAfter map getName _
 
   override def toString =
     s"GraphNode: name=[$name], option=[$workflowOption], before=[$beforeNames], after=[$afterNames], decisionBefore=[$decisionBeforeNames], decisionAfter=[$decisionAfterNames], decisionRoute=[$decisionRoutes], errorTo=[$errorTo]"
@@ -59,33 +49,15 @@ case class GraphNode(var name: String,
     Objects.hashCode(name, workflowOption, beforeNames, afterNames, decisionBeforeNames, decisionAfterNames, decisionRoutes, errorTo)
   }
 
-  /*
-* Checks whether this GraphNode has the desired decisionRoute
-*/
-  def containsDecisionRoute(predicateRoute: String, decisionNode: DecisionNode): Boolean = {
-    decisionRoutes contains (predicateRoute -> decisionNode)
-  }
+  def beforeNames = before map getName _
 
-  /*
-* Gets route node name for specified predicate route - Only applies for
-* Decisions
-*/
-  private def nameRoutes(predicateRoutes: List[String]): String = {
-    this.workflowOption match {
-      case WorkflowDecision(predicates, decisionNode) =>
-        predicateRoutes map { predicateRoute =>
-          decisionAfter.find(_.containsDecisionRoute(predicateRoute, decisionNode)) match {
-            case Some(routeNode) => routeNode.name
-            case _               => "kill"
-          }
-        } mkString "-"
-      case _ => throw new RuntimeException("error: getting route from non-decision node")
-    }
-  }
+  def getName(n: GraphNode) = n.name
 
-  def getDecisionRouteName(predicateRoute: String): String = {
-    nameRoutes(List(predicateRoute))
-  }
+  def afterNames = after map getName _
+
+  def decisionBeforeNames = decisionBefore map getName _
+
+  def decisionAfterNames = decisionAfter map getName _
 
   def getDecisionName(predicateRoutes: List[String]): String = {
     nameRoutes("default" :: predicateRoutes)
@@ -113,7 +85,7 @@ case class GraphNode(var name: String,
       case WorkflowJob(job: Job[ActionOption]) =>
         val errorTransition = errorTo match {
           case Some(node) => node.name
-          case _          => "kill"
+          case _ => "kill"
         }
 
         actionBuilder.buildAction(name, job, okTransition, errorTransition)
@@ -130,6 +102,34 @@ case class GraphNode(var name: String,
     }
 
     Set(result)
+  }
+
+  def getDecisionRouteName(predicateRoute: String): String = {
+    nameRoutes(List(predicateRoute))
+  }
+
+  /*
+* Gets route node name for specified predicate route - Only applies for
+* Decisions
+*/
+  private def nameRoutes(predicateRoutes: List[String]): String = {
+    this.workflowOption match {
+      case WorkflowDecision(predicates, decisionNode) =>
+        predicateRoutes map { predicateRoute =>
+          decisionAfter.find(_.containsDecisionRoute(predicateRoute, decisionNode)) match {
+            case Some(routeNode) => routeNode.name
+            case _ => "kill"
+          }
+        } mkString "-"
+      case _ => throw new RuntimeException("error: getting route from non-decision node")
+    }
+  }
+
+  /*
+* Checks whether this GraphNode has the desired decisionRoute
+*/
+  def containsDecisionRoute(predicateRoute: String, decisionNode: DecisionNode): Boolean = {
+    decisionRoutes contains (predicateRoute -> decisionNode)
   }
 }
 
@@ -158,7 +158,7 @@ object Conversion {
     val workflowOptions = orderedNodes flatMap (_.toXmlWorkflowOption(workflow.actionBuilder))
     val startTo: String = orderedNodes.headOption match {
       case Some(node) => node.name
-      case _          => "end"
+      case _ => "end"
     }
 
     val actions = workflowOptions :+ workflow.actionBuilder.buildKill(workflow.name)
@@ -188,12 +188,14 @@ object Conversion {
     )
   }
 
+  def toOozieDateTime(dateTime: DateTime) = dateTime.toDateTime(DateTimeZone.UTC).toString("yyyy-MM-dd'T'HH:mm'Z'")
+
   def apply[B, C, W](bundle: Bundle[B, C, W]): B = {
     bundle.buildBundle(
       name = bundle.name,
       kickoffTime = bundle.kickoffTime match {
         case Left(dateTime) => toOozieDateTime(dateTime)
-        case Right(string)  => string
+        case Right(string) => string
       },
       coordinatorDescriptors = bundle.coordinators.map(descriptor => {
         bundle.buildCoordinator(
@@ -206,12 +208,10 @@ object Conversion {
     )
   }
 
-  def toOozieDateTime(dateTime: DateTime) = dateTime.toDateTime(DateTimeZone.UTC).toString("yyyy-MM-dd'T'HH:mm'Z'")
-
   def convertPredicate(pred: Predicate): String = {
     pred match {
-      case Predicates.AlwaysTrue                => "true"
-      case pred @ Predicates.BooleanProperty(_) => pred.formattedProperty
+      case Predicates.AlwaysTrue => "true"
+      case pred@Predicates.BooleanProperty(_) => pred.formattedProperty
     }
   }
 

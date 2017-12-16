@@ -1,7 +1,7 @@
 package com.github.izhangzhihao.soozie.utils
 
 import com.github.izhangzhihao.soozie.conversion.Conversion
-import com.github.izhangzhihao.soozie.dsl.{ Bundle, Coordinator, WritableApplication, Workflow }
+import com.github.izhangzhihao.soozie.dsl.{Bundle, Coordinator, WritableApplication, Workflow}
 import com.github.izhangzhihao.soozie.writer.implicits._
 import com.github.izhangzhihao.soozie.writer._
 
@@ -9,6 +9,7 @@ import scala.util.Try
 import scalaxb.CanWriteXML
 
 object WriterImplicitConversions {
+
   implicit class Stringable[T](val underlying: T) extends AnyVal {
     def toXmlString(postProcessing: XmlPostProcessing,
                     scope: String,
@@ -45,5 +46,6 @@ object WriterImplicitConversions {
       writerEv.writeJob(path, properties, fileSystemUtils)
     }
   }
+
 }
 

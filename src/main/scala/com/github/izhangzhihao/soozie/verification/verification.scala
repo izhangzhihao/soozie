@@ -26,8 +26,8 @@ object Verification {
 
   def verifyDecisions(graph: Set[GraphNode]): Boolean = {
     val decisions: Set[GraphNode] = graph filter (node => node.workflowOption match {
-      case dec @ WorkflowDecision(predicates, _) => true
-      case _                                     => false
+      case dec@WorkflowDecision(predicates, _) => true
+      case _ => false
     })
     //verify that each predicate is represented
     val verifiedDecisions = decisions filter (dec => {
@@ -80,7 +80,7 @@ object Verification {
       val repair = ln.next
       repair match {
         case "y" =>
-        case _   => throw new RuntimeException("error: fork / join structure not supported by oozie")
+        case _ => throw new RuntimeException("error: fork / join structure not supported by oozie")
       }
     }
     var resultGraph = graph
@@ -160,6 +160,7 @@ object Verification {
       }
       (Set(currNode) /: currNode.graphNode.after) ((e1, e2) => e1 ++ generateVerificationNodes0(VerificationNode(e2, newParentThreads)))
     }
+
     (Set[VerificationNode]() /: startNodes) ((e1, e2) => e1 ++ generateVerificationNodes0(VerificationNode(e2, Seq(ForkThread(e2, e2)))))
   }
 
@@ -176,16 +177,6 @@ object Verification {
     val orderedBadJoinsGraphNodes: List[GraphNode] = partiallyOrderedBadJoins.toList sortWith (PartiallyOrderedNode.lt) map (_.node)
     val orderedBadJoins: List[VerificationNode] = orderedBadJoinsGraphNodes map (n => VerificationNode(n, badJoins.find(gn => gn.graphNode == n).get.parentThreads))
     orderedBadJoins.head
-  }
-
-  /*
-* Requires: node's VerificationNode representation is contained in vNodes
-*
-* Returns the VerificationNode representation of node
-*/
-  def getVNode(vNodes: Set[VerificationNode], node: GraphNode): VerificationNode = {
-
-    vNodes.find(n => n.graphNode == node).getOrElse(throw new RuntimeException("target node not contained in set of verification nodes"))
   }
 
   /*
@@ -222,5 +213,15 @@ object Verification {
       case _ => //otherwise, this can't be fixed by adding joins - Do nothing.
     }
     resultGraph
+  }
+
+  /*
+* Requires: node's VerificationNode representation is contained in vNodes
+*
+* Returns the VerificationNode representation of node
+*/
+  def getVNode(vNodes: Set[VerificationNode], node: GraphNode): VerificationNode = {
+
+    vNodes.find(n => n.graphNode == node).getOrElse(throw new RuntimeException("target node not contained in set of verification nodes"))
   }
 }

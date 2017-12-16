@@ -18,6 +18,8 @@ class BundleApp[B: CanWriteXML, C: CanWriteXML, W: CanWriteXML](override val bun
   extends BundleAppAbs[B, C, W] {
   override val oozieClient: OozieClient = new OozieClient(oozieUrl)
 
+  import com.github.izhangzhihao.soozie.writer.implicits._
+
   implicit override val executionContext: ExecutionContext = scala.concurrent.ExecutionContext.global
 
   executionResult.onComplete {

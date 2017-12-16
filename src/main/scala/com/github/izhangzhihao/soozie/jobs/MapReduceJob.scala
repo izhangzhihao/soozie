@@ -52,17 +52,17 @@ object MapReduceJob {
     new Job[MAPu45REDUCE] {
       override val jobName = _jobName
       override val record = ???
-//        DataRecord(None, Some("map-reduce"), MAPu45REDUCE(
-//        jobu45tracker = jobTracker,
-//        nameu45node = nameNode,
-//        prepare = prepare,
-//        configuration = configBuilderImpl(configuration),
-//        mapu45reduceoption = mapReduceOption,
-//        jobu45xml = jobXml,
-//        configu45class = configClass,
-//        file = file,
-//        archive = archive
-//      ))
+      //        DataRecord(None, Some("map-reduce"), MAPu45REDUCE(
+      //        jobu45tracker = jobTracker,
+      //        nameu45node = nameNode,
+      //        prepare = prepare,
+      //        configuration = configBuilderImpl(configuration),
+      //        mapu45reduceoption = mapReduceOption,
+      //        jobu45xml = jobXml,
+      //        configu45class = configClass,
+      //        file = file,
+      //        archive = archive
+      //      ))
     }
   }
 }

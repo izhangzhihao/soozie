@@ -4,6 +4,7 @@ import java.io.StringWriter
 import java.util.Properties
 
 object PropertyImplicits {
+
   implicit class StringWrapper(val string: String) extends AnyVal {
     def toParameter: String = s"$${$string}"
   }
@@ -33,4 +34,5 @@ object PropertyImplicits {
       stringWriter.getBuffer.toString
     }
   }
+
 }

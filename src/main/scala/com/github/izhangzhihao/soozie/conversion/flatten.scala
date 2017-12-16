@@ -4,15 +4,21 @@ import com.github.izhangzhihao.soozie.dsl._
 
 case class RefSet[A <: AnyRef](vals: Seq[A]) extends Set[A] {
 
-  override def contains(elem: A): Boolean = vals exists (e => e eq elem)
-
   def iterator: Iterator[A] = vals.iterator
+
+  def ++(elems: RefSet[A]): RefSet[A] = (this /: elems) (_ + _)
+
+  def --(elems: RefSet[A]): RefSet[A] = (this /: elems) (_ - _)
 
   def -(elem: A): RefSet[A] = {
     if (!(this contains elem))
       this
     else
       RefSet(vals filter (_ ne elem))
+  }
+
+  def map[B <: AnyRef](f: (A) => B): RefSet[B] = {
+    (RefSet[B]() /: vals) ((e1: RefSet[B], e2: A) => e1 + f(e2))
   }
 
   def +(elem: A): RefSet[A] = {
@@ -22,13 +28,7 @@ case class RefSet[A <: AnyRef](vals: Seq[A]) extends Set[A] {
       RefSet(vals :+ elem)
   }
 
-  def ++(elems: RefSet[A]): RefSet[A] = (this /: elems) (_ + _)
-
-  def --(elems: RefSet[A]): RefSet[A] = (this /: elems) (_ - _)
-
-  def map[B <: AnyRef](f: (A) => B): RefSet[B] = {
-    (RefSet[B]() /: vals) ((e1: RefSet[B], e2: A) => e1 + f(e2))
-  }
+  override def contains(elem: A): Boolean = vals exists (e => e eq elem)
 
   override def equals(that: Any): Boolean = {
     that match {
@@ -55,10 +55,6 @@ object RefSet {
  */
 case class RefMap[A <: AnyRef, B](vals: Map[RefWrap[A], B]) extends Map[RefWrap[A], B] {
 
-  def +[B1 >: B](kv: (RefWrap[A], B1)) = {
-    RefMap(vals + kv)
-  }
-
   def +[B1 >: B](kv: => (A, B1)): RefMap[A, B1] = {
     val newKv = RefWrap(kv._1) -> kv._2
     RefMap(vals + newKv)
@@ -66,6 +62,10 @@ case class RefMap[A <: AnyRef, B](vals: Map[RefWrap[A], B]) extends Map[RefWrap[
 
   def ++(rmap: RefMap[A, B]) = {
     (this /: rmap) (_ + _)
+  }
+
+  def +[B1 >: B](kv: (RefWrap[A], B1)) = {
+    RefMap(vals + kv)
   }
 
   def -(key: RefWrap[A]) = {
@@ -86,7 +86,7 @@ case class RefMap[A <: AnyRef, B](vals: Map[RefWrap[A], B]) extends Map[RefWrap[
 case class RefWrap[T <: AnyRef](value: T) {
   override def equals(other: Any) = other match {
     case ref: RefWrap[_] => ref.value eq value
-    case _               => false
+    case _ => false
   }
 }
 
@@ -132,7 +132,7 @@ object Flatten {
                 //remove previous reference from map
                 wfAccum.find(elem => elem._2 == lastNode) match {
                   case Some(pair) => accum -= pair._1
-                  case _          =>
+                  case _ =>
                 }
                 //update reference to last nodes
                 accum += currentDep -> lastNode
@@ -145,7 +145,7 @@ object Flatten {
                   val end = lastNode.decisionAfter filter (_.workflowOption == WorkflowEnd) headOption
                   val decisionRoutes = end match {
                     case Some(node) => node.decisionRoutes
-                    case _          => Set.empty
+                    case _ => Set.empty
                   }
                   end foreach (lastNode.decisionAfter -= _)
                   //add in new decisionAfter
@@ -162,7 +162,7 @@ object Flatten {
                 flatten0(newCurrent, newAfter, inDecision)
               }
             //check if we're dealing with a Decision
-            case OneOf(dep1, deps @ _*) =>
+            case OneOf(dep1, deps@_*) =>
               //recur on everything this is dependent on
               (List(dep1) ++ deps) foreach (currDep => {
                 accum get currDep match {
@@ -210,7 +210,7 @@ object Flatten {
               after foreach (_.decisionRoutes += additionalDecisionRoute)
               flatten0(parent, after)
 
-            case decisionNode @ DecisionNode(decision, dependencies) =>
+            case decisionNode@DecisionNode(decision, dependencies) =>
               val node = GraphNode(
                 "decision",
                 WorkflowDecision(decision.predicates, decisionNode),
@@ -333,6 +333,7 @@ object Flatten {
 */
   def nameNumMatch(name1: String, name2: String): Boolean = {
     val Pattern = """\d""".r
+
     def nameNumMatch0(n1: String, n2: String): Boolean = {
       n1.takeRight(1) match {
         case Pattern() =>
@@ -341,6 +342,7 @@ object Flatten {
           n1 == n2
       }
     }
+
     nameNumMatch0(name1, name2) || nameNumMatch0(name2, name1)
   }
 
@@ -349,7 +351,7 @@ object Flatten {
     nodes map (currNode => {
       currNode.name.takeRight(1) match {
         case Pattern() => currNode.name = currNode.name.dropRight(1)
-        case _         =>
+        case _ =>
       }
       currNode
     })

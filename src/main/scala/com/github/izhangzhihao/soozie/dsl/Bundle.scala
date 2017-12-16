@@ -63,7 +63,7 @@ object Bundle {
       def buildCoordinator(name: String, configuration: ConfigurationList, path: String): Coordinator = {
         COORDINATOR(
           appu45path = path,
-//          name = name,
+          //          name = name,
           configuration = configBuilderImpl(configuration)
         )
       }
@@ -72,7 +72,7 @@ object Bundle {
                                kickoffTime: String,
                                coordinators: Seq[Coordinator]): BUNDLEu45APP = {
         BUNDLEu45APP(
-//          name = name,
+          //          name = name,
           parameters = parameterBuilderImpl(parameters),
           controls = Some(CONTROLS(Some(CONTROLSSequence1(Some(kickoffTime))))),
           coordinator = coordinators

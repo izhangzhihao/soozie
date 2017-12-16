@@ -15,16 +15,17 @@ class CoordinatorApp[C: CanWriteXML, W: CanWriteXML](override val coordinator: C
                                                      override val fileSystemUtils: FileSystemUtils,
                                                      override val properties: Option[Map[String, String]] = None,
                                                      override val postProcessing: XmlPostProcessing = XmlPostProcessing.Default)
-    extends CoordinatorAppAbs[C, W] {
+  extends CoordinatorAppAbs[C, W] {
   override val oozieClient: OozieClient = new OozieClient(oozieUrl)
 
   implicit override val executionContext: ExecutionContext = scala.concurrent.ExecutionContext.global
 
-  executionResult.onComplete{
+  executionResult.onComplete {
     case Success(_) => println(ScoozieConfig.successMessage)
     case Failure(e) => println(s"Application failed with the following error: ${e.getMessage}")
   }
 
   import scala.concurrent.duration._
+
   Await.result(executionResult, 5.minutes)
 }

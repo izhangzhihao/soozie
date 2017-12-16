@@ -15,7 +15,7 @@ object ExecutionUtils {
 
   def removeCoordinatorJob(appName: String, oozieClient: OozieClient): Unit = {
     import scala.collection.JavaConversions._
-    val coordJobsToRemove = oozieClient.getCoordJobsInfo(s"NAME=$appName", 1, 100).filter{
+    val coordJobsToRemove = oozieClient.getCoordJobsInfo(s"NAME=$appName", 1, 100).filter {
       cj => cj.getAppName == appName && cj.getStatus == Job.Status.RUNNING
     }.map(_.getId).toSeq
 
@@ -23,7 +23,7 @@ object ExecutionUtils {
   }
 
   def run[T <: OozieClient, K](oozieClient: T, properties: Map[String, String])
-                              (implicit ev: OozieClientLike[T, K]): Future[K] ={
+                              (implicit ev: OozieClientLike[T, K]): Future[K] = {
     val conf = oozieClient.createConfiguration()
     properties.foreach { case (key, value) => conf.setProperty(key, value) }
 
@@ -53,6 +53,7 @@ trait OozieClientLike[Client, Job] {
 }
 
 object OozieClientLike {
+
   implicit object OozieClientLikeCoord extends OozieClientLike[OozieClient, Job] {
     def getJobInfo(oozieClient: OozieClient, jobId: String): Job = oozieClient.getCoordJobInfo(jobId)
   }
@@ -60,4 +61,5 @@ object OozieClientLike {
   implicit object OozieClientLikeWorkflow extends OozieClientLike[OozieClient, WorkflowJob] {
     def getJobInfo(oozieClient: OozieClient, id: String): WorkflowJob = oozieClient.getJobInfo(id)
   }
+
 }

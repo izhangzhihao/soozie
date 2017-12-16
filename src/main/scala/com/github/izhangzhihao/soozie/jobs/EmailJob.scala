@@ -38,16 +38,16 @@ object EmailJob {
     new Job[ACTION] {
       override val jobName = _jobName
       override val record: DataRecord[ACTION] = ???
-//        DataRecord(None, Some("email"), ACTION(
-//        to = to,
-//        cc = cc,
-//        bcc = bcc,
-//        subject = subject,
-//        body = body,
-//        content_type = contentType,
-//        attachment = attachment,
-//        xmlns = "uri:oozie:email-action")
-//      )
+      //        DataRecord(None, Some("email"), ACTION(
+      //        to = to,
+      //        cc = cc,
+      //        bcc = bcc,
+      //        subject = subject,
+      //        body = body,
+      //        content_type = contentType,
+      //        attachment = attachment,
+      //        xmlns = "uri:oozie:email-action")
+      //      )
     }
   }
 }

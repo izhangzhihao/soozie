@@ -15,16 +15,17 @@ class WorkflowApp[W: CanWriteXML](override val workflow: Workflow[W],
                                   override val fileSystemUtils: FileSystemUtils,
                                   override val properties: Option[Map[String, String]] = None,
                                   override val postProcessing: XmlPostProcessing = XmlPostProcessing.Default)
-    extends WorkflowAppAbs[W] {
+  extends WorkflowAppAbs[W] {
   override val oozieClient: OozieClient = new OozieClient(oozieUrl)
 
   implicit override val executionContext: ExecutionContext = scala.concurrent.ExecutionContext.global
 
-  executionResult.onComplete{
+  executionResult.onComplete {
     case Success(_) => println(ScoozieConfig.successMessage)
     case Failure(e) => println(s"Application failed with the following error: ${e.getMessage}")
   }
 
   import scala.concurrent.duration._
+
   Await.result(executionResult, 5.minutes)
 }

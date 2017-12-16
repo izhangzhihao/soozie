@@ -11,6 +11,7 @@ import scala.util.Try
 import scalaxb.CanWriteXML
 
 package object implicits {
+
   trait CanWrite {
     def toXml(xmlPostProcessing: XmlPostProcessing = XmlPostProcessing.Default): String
 
@@ -73,8 +74,6 @@ package object implicits {
       } yield ()
     }
 
-    override def toXml(xmlPostProcessing: XmlPostProcessing = XmlPostProcessing.Default) = underlying.toXmlString(xmlPostProcessing)
-
     override def getJobProperties(path: String,
                                   properties: Option[Map[String, String]] = None): Map[String, String] = {
       val pathBuilder: PathBuilder = new PathBuilder(path)
@@ -85,6 +84,8 @@ package object implicits {
         s"/$workflowFolderName/${withXmlExtension(underlying.name)}",
         (properties ++ Some(getShellActionProperties(underlying))).headOption)
     }
+
+    override def toXml(xmlPostProcessing: XmlPostProcessing = XmlPostProcessing.Default) = underlying.toXmlString(xmlPostProcessing)
   }
 
   implicit class CoordinatorWriter[C: CanWriteXML, W: CanWriteXML](underlying: Coordinator[C, W]) extends CanWrite {
@@ -127,9 +128,6 @@ package object implicits {
       } yield ()
     }
 
-    override def toXml(xmlPostProcessing: XmlPostProcessing = XmlPostProcessing.Default) =
-      underlying.toXmlString(xmlPostProcessing)
-
     override def getJobProperties(path: String,
                                   properties: Option[Map[String, String]] = None): Map[String, String] = {
 
@@ -143,9 +141,12 @@ package object implicits {
         properties =
           Some(
             properties.getOrElse(Map[String, String]()) ++
-            getShellActionProperties(underlying.workflow) +
-            createPathProperty(workflowName, workflowFolderName)))
+              getShellActionProperties(underlying.workflow) +
+              createPathProperty(workflowName, workflowFolderName)))
     }
+
+    override def toXml(xmlPostProcessing: XmlPostProcessing = XmlPostProcessing.Default) =
+      underlying.toXmlString(xmlPostProcessing)
   }
 
   implicit class BundleWriter[B: CanWriteXML, C: CanWriteXML, W: CanWriteXML, A](underlying: Bundle[B, C, W]) extends CanWrite {
@@ -241,4 +242,5 @@ package object implicits {
         properties = Some(properties.getOrElse(Map[String, String]()) ++ pathProperties))
     }
   }
+
 }

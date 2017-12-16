@@ -8,14 +8,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
 
 abstract class ScoozieApp extends App {
-  val properties: Option[Map[String, String]]
-  val appPath: String
-  val oozieClient: OozieClient
-  val fileSystemUtils: FileSystemUtils
-  val postProcessing: XmlPostProcessing
-
-  val usage = "java -cp <...> com.your.scoozie.app.ObjectName -todayString=foo -yesterdayString=foo ..."
-
+  type Job
   lazy val argumentProperties: Option[Map[String, String]] = {
     if (args nonEmpty) {
       Some(args.map(arg => {
@@ -24,11 +17,13 @@ abstract class ScoozieApp extends App {
       }).toMap)
     } else None
   }
-
   lazy val jobProperties = (argumentProperties ++ properties).reduceOption(_ ++ _)
-
-  type Job
-
+  val properties: Option[Map[String, String]]
+  val appPath: String
+  val oozieClient: OozieClient
+  val fileSystemUtils: FileSystemUtils
+  val postProcessing: XmlPostProcessing
+  val usage = "java -cp <...> com.your.scoozie.app.ObjectName -todayString=foo -yesterdayString=foo ..."
   val writeResult: Try[Unit]
 
   implicit val executionContext: ExecutionContext

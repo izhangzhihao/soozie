@@ -1,6 +1,6 @@
 package com.github.izhangzhihao.soozie.jobs
 
-import com.github.izhangzhihao.soozie.dsl.{ ConfigBuilder, ConfigurationList, Job }
+import com.github.izhangzhihao.soozie.dsl.{ConfigBuilder, ConfigurationList, Job}
 import oozie.hiveaction._
 
 import scalaxb._
@@ -61,22 +61,22 @@ object HiveJob {
       }
       override val jobName = s"hive_$cleanName"
       override val record = ???
-//        DataRecord(None, Some("hive"), ACTION(
-//        script = fileName,
-//        jobu45tracker = jobTracker,
-//        nameu45node = nameNode,
-//        jobu45xml = jobXml match {
-//          case Some(xml) => xml
-//          case _         => Seq[String]()
-//        },
-//        configuration = configBuilderImpl(configuration),
-//        param = parameters.toSeq,
-//        prepare = prepare,
-//        file = file,
-//        argument = argument,
-//        archive = archive,
-//        xmlns = "uri:oozie:hive-action"
-//      ))
+      //        DataRecord(None, Some("hive"), ACTION(
+      //        script = fileName,
+      //        jobu45tracker = jobTracker,
+      //        nameu45node = nameNode,
+      //        jobu45xml = jobXml match {
+      //          case Some(xml) => xml
+      //          case _         => Seq[String]()
+      //        },
+      //        configuration = configBuilderImpl(configuration),
+      //        param = parameters.toSeq,
+      //        prepare = prepare,
+      //        file = file,
+      //        argument = argument,
+      //        archive = archive,
+      //        xmlns = "uri:oozie:hive-action"
+      //      ))
     }
   }
 }
