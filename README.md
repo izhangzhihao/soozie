@@ -28,19 +28,22 @@ How it works:
 
 There are three main layers to Soozie:
 
-1. Specification of job in DSL.  This encapsulates the syntactic sugar
+1. Specification of job in DSL. This encapsulates the syntactic sugar
    that makes it easy to read and write Soozie workflows. The general
    format for a Soozie workflow is as follows:
 
     ```scala
-    val job1 = JobType(params) dependsOn Start
-    val job2 = JobType(params) dependsOn job2
-    val job3 = JobType(params) dependsOn job3
+    val first = MapReduceJob("first") dependsOn Start
+    val second = MapReduceJob("second") dependsOn first
+    val third = MapReduceJob("third") dependsOn second
+    val fourth = MapReduceJob("fourth") dependsOn third
+    val end = End dependsOn fourth
     ```
 
     This is the code that a workflow developer will actually be writing.
     The intent is to make it easy to read and to see the dependency path
     between jobs. Soozie will automatically figure out forks/joins, etc.
+    Specific samples of this can be found in [samples.scala](/src/test/scala/com/github/izhangzhihao/soozie/examples/samples.scala)
 
 2. Logic / conversion from DSL spec to workflow graph. This is the real
    workhorse of Soozie, as it converts the programmer-specified workflow
@@ -49,9 +52,9 @@ There are three main layers to Soozie:
    to XML. This step also includes verification on the result graph.
 
 3. Conversion from intermediate graph to XML. This step makes use of
-   scalaxb, an XML data-binding tool for scala. In this step each node in
+   [scalaxb](https://github.com/eed3si9n/scalaxb), an XML data-binding tool for scala. In this step each node in
    the intermediate graph is converted to an oozie-specific type. Finally,
-   these nodes are converted to XML.  This XML can be run in oozie by a
+   these nodes are converted to XML. This XML can be run in oozie by a
    scala command.
 
 
@@ -64,8 +67,8 @@ Dependency: The parent of everything that a workflow job could depend on. (nodes
 
 Work: Any work that a workflow node performs. This could be End, Kill, Jobs, sub workflows, etc.
 
-Job: Extends Work. This is the parent of the typical oozie jobs. (HiveJob, MapReduceJob,
-	 DistCpJob, etc). Specific jobs are easy to extend and customize in order to fit the client's
+Job: Extends Work. This is the parent of the typical oozie jobs. (`HiveJob`, `MapReduceJob`,
+	 `DistCpJob`, etc). Specific jobs are easy to extend and customize in order to fit the client's
 	 needs.
 
 In practice, each line of developer-specified Soozie code will return a Node, which
@@ -113,7 +116,7 @@ For example, consider the following workflow:
 	In addition, Soozie will alert you by throwing an error if the workflow you have specified is not allowed by Oozie (for example, two nodes from different threads being joined)
 
 3. **Making things interesting - Decisions**
-	Often a developer needs to specify variable paths in a workflow that are run conditionally. This is allowed in Soozie via Decision and OneOf.
+	Often a developer needs to specify variable paths in a workflow that are run conditionally. This is allowed in Soozie via `Decision` and `OneOf`.
 
 	```scala
 	def DecisionExample = {
@@ -130,11 +133,11 @@ For example, consider the following workflow:
 		Workflow("simple-decision", done)
 	}
 	```
-	In this example, route1 (route1Start -> route1End) will be run if ${doRoute1} is evaluated to true.  Otherwise, route2 (route2Start -> route2End) will be run. Again, this reduces developer cognitive overhead as the developer only needs to consider the dependencies for one node at a time. Clearly "last" depends on only *one* of route1 and route2.
+	In this example, route1 (route1Start -> route1End) will be run if ${doRoute1} is evaluated to true. Otherwise, route2 (route2Start -> route2End) will be run. Again, this reduces developer cognitive overhead as the developer only needs to consider the dependencies for one node at a time. Clearly "last" depends on only *one* of route1 and route2.
 	More complex decision structures are supported by Oozie as well. Verification will be automatically performed on the decisions to make sure that the developer has included all routes and default routes for each decision.
 
 	1. **Pour some sugar on me - "doIf" and "Optional"**
-		A common design pattern for decisions is to have an "optional" route that may or may not be inserted into the workflow.  Soozie has provided some sugar for making this special case easy to think about and specify in code.
+		A common design pattern for decisions is to have an "optional" route that may or may not be inserted into the workflow. Soozie has provided some sugar for making this special case easy to think about and specify in code.
 
 		```scala
 		def SugarOption = {
@@ -148,7 +151,7 @@ For example, consider the following workflow:
 	This syntax makes the semantics behind the optional node clearer than thinking about a separate decision. In this example, "option" is run if the "${doOption}" argument is evaluated to true (Soozie will figure out the brackets), and "second" must come after "first" and optionally "option".
 
 4. **Scalability, Modularity - Sub Workflows**
-	Soozie allows the developer to control the granularity of his project by using and defining sub-workflows at will. Using the previous SugarOption workflow as an example, we can easily create a new, more complex workflow without worrying about its specifics.
+	Soozie allows the developer to control the granularity of his project by using and defining sub-workflows at will. Using the previous `SugarOption` workflow as an example, we can easily create a new, more complex workflow without worrying about its specifics.
 
 	```scala
 	def SubWfExample = {
@@ -173,10 +176,10 @@ For example, consider the following workflow:
 		}
 		```
 
-	This Soozie code will create a workflow containing three nodes. The "first" node will proceed to "second" in the optimal case, but will  now proceed to "errorPath" in the case of an error.  Additionally, the OneOf clause is used again here and has an intuitive meaning.
+	This Soozie code will create a workflow containing three nodes. The "first" node will proceed to "second" in the optimal case, but will now proceed to "errorPath" in the case of an error. Additionally, the `OneOf` clause is used again here and has an intuitive meaning.
 
 6. **Creating and Running Workflows in Soozie**
-	Soozie makes running workflows easy. Simply create an object that extends SoozieApp, pass in your workflow and any parameters, and you've got a runnable main class that will generate and run an oozie workflow.
+	Soozie makes running workflows easy. Simply create an object that extends `SoozieApp`, pass in your workflow and any parameters, and you've got a runnable main class that will generate and run an oozie workflow.
 
 	```scala
 	object RunExample extends SoozieApp(SubWfExample)
@@ -198,5 +201,9 @@ For example, consider the following workflow:
 
 Additional Help
 --------------
-More example Soozie code can be found in samples.scala. Available job definitions can be found in jobs.scala.  These jobs can be easily extended to fit your specific use cases.
+More example Soozie code can be found in [samples.scala](/src/test/scala/com/github/izhangzhihao/soozie/examples/samples.scala). Available job definitions can be found in [jobs](/src/main/scala/com/github/izhangzhihao/soozie/jobs). Those jobs can be easily extended to fit your specific use cases.
+
+Acknowledgements
+--------------
+This project is heavily inspired by [scoozie](https://github.com/glava/scoozie) and [scoozie](https://github.com/QuantiumTechnology/scoozie)
 

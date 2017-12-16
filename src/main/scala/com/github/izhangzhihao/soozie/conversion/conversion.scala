@@ -87,7 +87,6 @@ case class GraphNode(var name: String,
           case Some(node) => node.name
           case _ => "kill"
         }
-
         actionBuilder.buildAction(name, job, okTransition, errorTransition)
       case WorkflowDecision(predicates, _) =>
         val defaultName = getDecisionRouteName("default")
