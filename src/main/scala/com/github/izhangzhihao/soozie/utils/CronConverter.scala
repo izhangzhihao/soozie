@@ -7,17 +7,6 @@ import scala.collection.immutable.Range.Inclusive
 
 object CronConverter {
 
-  //  class Range(start: Int, end: Int, step: Int) {
-  //    protected def copy(start: Int, end: Int, step: Int): Range = new Range(start, end, step)
-  //
-  //    /** Create a new range with the `start` and `end` values of this range and
-  //      * a new `step`.
-  //      *
-  //      * @return a new range with a different step
-  //      */
-  //    def by(step: Int): Range = copy(start, end, step)
-  //  }
-
   trait TimeUnit {
     val minValue: Int
     val maxValue: Int

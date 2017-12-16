@@ -58,13 +58,15 @@ object Bundle {
 
       override val namespace: String = "bundle"
       override val elementLabel: String = "bundle-app"
-      override val scope: String = "uri:oozie:bundle"
+      override val scope: String = "uri:oozie:bundle:0.2"
 
       def buildCoordinator(name: String, configuration: ConfigurationList, path: String): Coordinator = {
         COORDINATOR(
           appu45path = path,
           //          name = name,
           configuration = configBuilderImpl(configuration)
+//          attributes = Map("@name", name)
+
         )
       }
 

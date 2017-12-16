@@ -75,7 +75,7 @@ object HiveJob {
       //        file = file,
       //        argument = argument,
       //        archive = archive,
-      //        xmlns = "uri:oozie:hive-action"
+      //        xmlns = "uri:oozie:hive-action:0.5"
       //      ))
     }
   }

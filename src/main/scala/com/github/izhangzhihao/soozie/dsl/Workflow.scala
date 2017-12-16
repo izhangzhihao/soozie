@@ -231,7 +231,7 @@ object Workflow {
 
       override val name = _name
       override val end = _end
-      override val scope = "uri:oozie:workflow"
+      override val scope = "uri:oozie:workflow:0.5"
       override val namespace = "workflow"
       override val elementLabel = "workflow-app"
 

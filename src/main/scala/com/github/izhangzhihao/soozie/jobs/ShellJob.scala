@@ -78,7 +78,7 @@ object ShellJob {
           //            file = file,
           //            archive = archive,
           //            captureu45output = if (captureOutput) Some(FLAG()) else None,
-          //            xmlns = "uri:oozie:shell-action")
+          //            xmlns = "uri:oozie:shell-action:0.3")
           //          ),
           descriptor = None
         )
@@ -101,7 +101,7 @@ object ShellJob {
           //            file = file ++ Seq(s"${WriterUtils.buildPathPropertyName(jobName).toParameter}#$jobName.$scriptExtension"),
           //            archive = archive,
           //            captureu45output = if (captureOutput) Some(FLAG()) else None,
-          //            xmlns = "uri:oozie:shell-action")
+          //            xmlns = "uri:oozie:shell-action:0.3")
           //          ),
           descriptor = Some(ShellScriptDescriptor(jobName, shellScript.script))
         )

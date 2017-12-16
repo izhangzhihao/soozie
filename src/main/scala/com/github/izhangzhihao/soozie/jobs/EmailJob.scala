@@ -46,7 +46,7 @@ object EmailJob {
       //        body = body,
       //        content_type = contentType,
       //        attachment = attachment,
-      //        xmlns = "uri:oozie:email-action")
+      //        xmlns = "uri:oozie:email-action:0.2")
       //      )
     }
   }

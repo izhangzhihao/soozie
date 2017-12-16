@@ -47,10 +47,13 @@ resolvers ++= Seq(
 lazy val root = (project in file(".")).
   enablePlugins(ScalaxbPlugin).
   settings(
+    ScalaxbPlugin.baseScalaxbSettings,
     name := "soozie",
-    organization := "com.github.izhangzhihao.soozie",
+    organization := "com.github.izhangzhihao",
     scalaVersion := "2.12.4",
-    scalaxbPackageNames in(Compile, scalaxb) := Map(
+    scalaxbContentsSizeLimit := 20,
+    scalaxbNamedAttributes := true,
+    scalaxbPackageNames := Map(
       uri("uri:oozie:workflow:0.5") -> s"$rootFolder.workflow",
       uri("uri:oozie:hive-action:0.5") -> s"$rootFolder.hive",
       uri("uri:oozie:shell-action:0.3") -> s"$rootFolder.shell",

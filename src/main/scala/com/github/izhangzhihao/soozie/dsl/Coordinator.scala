@@ -96,7 +96,7 @@ object Coordinator {
 
       override val namespace: String = "coordinator"
       override val elementLabel: String = "coordinator-app"
-      override val scope: String = "uri:oozie:coordinator"
+      override val scope: String = "uri:oozie:coordinator:0.4"
 
       override def buildCoordinator(start: String,
                                     end: String,
