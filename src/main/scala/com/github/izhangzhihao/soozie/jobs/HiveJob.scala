@@ -5,6 +5,7 @@ import oozie.hive._
 
 import scalaxb._
 import oozie._
+import oozie.distcp.`package`._
 
 object HiveJob {
   def apply(jobName: String,
@@ -60,23 +61,23 @@ object HiveJob {
           fileName
       }
       override val jobName = s"hive_$cleanName"
-      override val record = ???
-      //        DataRecord(None, Some("hive"), ACTION(
-      //        script = fileName,
-      //        jobu45tracker = jobTracker,
-      //        nameu45node = nameNode,
-      //        jobu45xml = jobXml match {
-      //          case Some(xml) => xml
-      //          case _         => Seq[String]()
-      //        },
-      //        configuration = configBuilderImpl(configuration),
-      //        param = parameters.toSeq,
-      //        prepare = prepare,
-      //        file = file,
-      //        argument = argument,
-      //        archive = archive,
-      //        xmlns = "uri:oozie:hive-action:0.5"
-      //      ))
+      override val record =
+        DataRecord(None, Some("hive"), ACTION(
+          script = fileName,
+          jobu45tracker = jobTracker,
+          nameu45node = nameNode,
+          jobu45xml = jobXml match {
+            case Some(xml) => xml
+            case _ => Seq[String]()
+          },
+          configuration = configBuilderImpl(configuration),
+          param = parameters,
+          prepare = prepare,
+          file = file,
+          argument = argument,
+          archive = archive,
+          xmlns = "uri:oozie:hive-action:0.5"
+        ))
     }
   }
 }

@@ -2,7 +2,7 @@ package com.github.izhangzhihao.soozie.jobs
 
 import com.github.izhangzhihao.soozie.dsl.Job
 import oozie.email._
-
+import oozie.distcp.`package`._
 import scalaxb.DataRecord
 
 object EmailJob {
@@ -37,17 +37,17 @@ object EmailJob {
 
     new Job[ACTION] {
       override val jobName = _jobName
-      override val record: DataRecord[ACTION] = ???
-      //        DataRecord(None, Some("email"), ACTION(
-      //        to = to,
-      //        cc = cc,
-      //        bcc = bcc,
-      //        subject = subject,
-      //        body = body,
-      //        content_type = contentType,
-      //        attachment = attachment,
-      //        xmlns = "uri:oozie:email-action:0.2")
-      //      )
+      override val record: DataRecord[ACTION] =
+        DataRecord(None, Some("email"), ACTION(
+          to = to,
+          cc = cc,
+          bcc = bcc,
+          subject = subject,
+          body = body,
+          content_type = contentType,
+          attachment = attachment,
+          xmlns = "uri:oozie:email-action:0.2")
+        )
     }
   }
 }

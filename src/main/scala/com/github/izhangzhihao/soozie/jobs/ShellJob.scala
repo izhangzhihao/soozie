@@ -3,6 +3,7 @@ package com.github.izhangzhihao.soozie.jobs
 import com.github.izhangzhihao.soozie.dsl.{ConfigBuilder, ConfigurationList, Job}
 import com.github.izhangzhihao.soozie.utils.WriterUtils
 import oozie.shell._
+import oozie.distcp.`package`._
 
 import scalaxb.DataRecord
 
@@ -64,22 +65,22 @@ object ShellJob {
       case Left(oozieExecString) =>
         new ShellJob[ACTION](
           jobName = _jobName,
-          record = ???,
-          //            DataRecord(None, Some("shell"),
-          //            ACTION(
-          //            jobu45tracker = jobTracker,
-          //            nameu45node = nameNode,
-          //            prepare = prepare,
-          //            jobu45xml = jobXml,
-          //            configuration = configBuilderImpl(configuration),
-          //            exec = oozieExecString,
-          //            argument = arguments,
-          //            envu45var = environmentVariables,
-          //            file = file,
-          //            archive = archive,
-          //            captureu45output = if (captureOutput) Some(FLAG()) else None,
-          //            xmlns = "uri:oozie:shell-action:0.3")
-          //          ),
+          record =
+            DataRecord(None, Some("shell"),
+              ACTION(
+                jobu45tracker = jobTracker,
+                nameu45node = nameNode,
+                prepare = prepare,
+                jobu45xml = jobXml,
+                configuration = configBuilderImpl(configuration),
+                exec = oozieExecString,
+                argument = arguments,
+                envu45var = environmentVariables,
+                file = file,
+                archive = archive,
+                captureu45output = if (captureOutput) Some(FLAG()) else None,
+                xmlns = "uri:oozie:shell-action:0.3")
+            ),
           descriptor = None
         )
       case Right(shellScript) =>
@@ -88,21 +89,21 @@ object ShellJob {
 
         new ShellJob[ACTION](
           jobName = _jobName,
-          record = ???,
-          //            DataRecord(None, Some("shell"), ACTION(
-          //            jobu45tracker = jobTracker,
-          //            nameu45node = nameNode,
-          //            prepare = prepare,
-          //            jobu45xml = jobXml,
-          //            configuration = configBuilderImpl(configuration),
-          //            exec = s"$jobName.$scriptExtension",
-          //            argument = arguments,
-          //            envu45var = environmentVariables,
-          //            file = file ++ Seq(s"${WriterUtils.buildPathPropertyName(jobName).toParameter}#$jobName.$scriptExtension"),
-          //            archive = archive,
-          //            captureu45output = if (captureOutput) Some(FLAG()) else None,
-          //            xmlns = "uri:oozie:shell-action:0.3")
-          //          ),
+          record =
+            DataRecord(None, Some("shell"), ACTION(
+              jobu45tracker = jobTracker,
+              nameu45node = nameNode,
+              prepare = prepare,
+              jobu45xml = jobXml,
+              configuration = configBuilderImpl(configuration),
+              exec = s"$jobName.$scriptExtension",
+              argument = arguments,
+              envu45var = environmentVariables,
+              file = file ++ Seq(s"${WriterUtils.buildPathPropertyName(jobName).toParameter}#$jobName.$scriptExtension"),
+              archive = archive,
+              captureu45output = if (captureOutput) Some(FLAG()) else None,
+              xmlns = "uri:oozie:shell-action:0.3")
+            ),
           descriptor = Some(ShellScriptDescriptor(jobName, shellScript.script))
         )
     }

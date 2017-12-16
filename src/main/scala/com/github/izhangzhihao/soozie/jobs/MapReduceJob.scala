@@ -2,7 +2,7 @@ package com.github.izhangzhihao.soozie.jobs
 
 import com.github.izhangzhihao.soozie.dsl._
 import oozie.workflow._
-
+import oozie.distcp.`package`._
 import scalaxb.DataRecord
 
 object MapReduceJob {
@@ -51,18 +51,18 @@ object MapReduceJob {
 
     new Job[MAPu45REDUCE] {
       override val jobName = _jobName
-      override val record = ???
-      //        DataRecord(None, Some("map-reduce"), MAPu45REDUCE(
-      //        jobu45tracker = jobTracker,
-      //        nameu45node = nameNode,
-      //        prepare = prepare,
-      //        configuration = configBuilderImpl(configuration),
-      //        mapu45reduceoption = mapReduceOption,
-      //        jobu45xml = jobXml,
-      //        configu45class = configClass,
-      //        file = file,
-      //        archive = archive
-      //      ))
+      override val record =
+              DataRecord(None, Some("map-reduce"), MAPu45REDUCE(
+                jobu45tracker = jobTracker,
+                nameu45node = nameNode,
+                prepare = prepare,
+                configuration = configBuilderImpl(configuration),
+                mapu45reduceoption = mapReduceOption,
+                jobu45xml = jobXml,
+                configu45class = configClass,
+                file = file,
+                archive = archive
+              ))
     }
   }
 }

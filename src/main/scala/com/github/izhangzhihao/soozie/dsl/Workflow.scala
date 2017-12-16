@@ -1,6 +1,7 @@
 package com.github.izhangzhihao.soozie.dsl
 
 import scalaxb._
+import oozie.distcp.`package`._
 
 sealed trait Work {
   def dependsOn(dep1: Dependency, deps: Dependency*): Node = Node(this, List(dep1) ++ deps)
@@ -177,44 +178,43 @@ object Workflow {
       def buildAction(name: String,
                       actionOption: Job[WORKFLOWu45APPOption],
                       okTo: String,
-                      errorTo: String): DataRecord[WORKFLOWu45APPOption] = ???
+                      errorTo: String): DataRecord[WORKFLOWu45APPOption] =
+        DataRecord(None, Some("action"), ACTION(
+          name = name,
+          actionoption = actionOption.record,
+          ok = ACTION_TRANSITION(okTo),
+          error = ACTION_TRANSITION(errorTo)
+        ))
 
-      //        DataRecord(None, Some("action"), ACTION(
-      //          name = name,
-      //          actionoption = actionOption.record,
-      //          ok = ACTION_TRANSITION(okTo),
-      //          error = ACTION_TRANSITION(errorTo)
-      //        ))
+      def buildJoin(name: String, okTo: String): DataRecord[WORKFLOWu45APPOption] =
 
-      def buildJoin(name: String, okTo: String): DataRecord[WORKFLOWu45APPOption] = ???
+        DataRecord(None, Some("join"), JOIN(name = name, to = okTo))
 
-      //        DataRecord(None, Some("join"), JOIN(name = name, to = okTo))
+      def buildFork(name: String, afterNames: List[String]): DataRecord[WORKFLOWu45APPOption] =
 
-      def buildFork(name: String, afterNames: List[String]): DataRecord[WORKFLOWu45APPOption] = ???
-
-      //        DataRecord(None, Some("fork"),
-      //                    FORK(
-      //                      path = afterNames.map(FORK_TRANSITION),
-      //                      name = name
-      //                    )
-      //        )
+        DataRecord(None, Some("fork"),
+          FORK(
+            path = afterNames.map(FORK_TRANSITION),
+            name = name
+          )
+        )
 
       def buildDecision(name: String,
                         defaultName: String,
-                        cases: List[(Predicate, Route)]): DataRecord[WORKFLOWu45APPOption] = ???
+                        cases: List[(Predicate, Route)]): DataRecord[WORKFLOWu45APPOption] =
 
-      //        DataRecord(None, Some("decision"), DECISION(
-      //          name = name,
-      //          switch = SWITCH(
-      //            switchsequence1 = SWITCHSequence1(
-      //              caseValue = cases.map { case (predicate, route) => CASE(predicate, route) },
-      //              default = DEFAULT(defaultName)))))
+        DataRecord(None, Some("decision"), DECISION(
+          name = name,
+          switch = SWITCH(
+            switchsequence1 = SWITCHSequence1(
+              caseValue = cases.map { case (predicate, route) => CASE(predicate, route) },
+              default = DEFAULT(defaultName)))))
 
-      def buildKill(workflowName: String): DataRecord[WORKFLOWu45APPOption] = ???
+      def buildKill(workflowName: String): DataRecord[WORKFLOWu45APPOption] =
 
-      //        DataRecord(None, Some("kill"), KILL(
-      //          message = workflowName + " failed, error message[${wf:errorMessage(wf:lastErrorNode())}]",
-      //          name = "kill"))
+        DataRecord(None, Some("kill"), KILL(
+          message = workflowName + " failed, error message[${wf:errorMessage(wf:lastErrorNode())}]",
+          name = "kill"))
     }
 
     val parameterBuilderImpl = new ParameterBuilder[PARAMETERS, Property] {
@@ -237,19 +237,17 @@ object Workflow {
 
       override val actionBuilder = actionBuilderImpl
 
-      override def buildWorkflow(start: String, end: String, actions: Seq[DataRecord[ActionOption]]) = ???
-
-      //      {
-      //        WORKFLOWu45APP(name = name,
-      //          start = START(start),
-      //          end = END(end),
-      //          parameters = parameterBuilderImpl(parameters),
-      //          global = global,
-      //          credentials = credentials,
-      //          workflowu45appoption = actions,
-      //          any = any.map(DataRecord(None, Some("sla"), _))
-      //        )
-      //      }
+      override def buildWorkflow(start: String, end: String, actions: Seq[DataRecord[ActionOption]]) = {
+        WORKFLOWu45APP(name = name,
+          start = START(start),
+          end = END(end),
+          parameters = parameterBuilderImpl(parameters),
+          global = global,
+          credentials = credentials,
+          workflowu45appoption = actions,
+          any = any.map(DataRecord(None, Some("sla"), _))
+        )
+      }
     }
   }
 }

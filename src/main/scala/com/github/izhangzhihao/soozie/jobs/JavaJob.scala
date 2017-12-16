@@ -3,7 +3,7 @@ package com.github.izhangzhihao.soozie.jobs
 import com.github.izhangzhihao.soozie.dsl._
 import oozie.workflow.{JAVA, PREPARE, FLAG, CONFIGURATION, Property2}
 import oozie._
-
+import oozie.distcp.`package`._
 import scalaxb.DataRecord
 
 object JavaJob {
@@ -58,20 +58,20 @@ object JavaJob {
 
     new Job[JAVA] {
       override val jobName = _jobName
-      override val record = ???
-      //        DataRecord(None, Some("java"), JAVA(
-      //        jobu45tracker = jobTracker,
-      //        nameu45node = nameNode,
-      //        mainu45class = mainClass,
-      //        prepare = prepare,
-      //        configuration = configBuilderImpl(configuration),
-      //        javaoption = Seq(DataRecord(jvmOps.getOrElse(""))),
-      //        arg = args,
-      //        jobu45xml = jobXml,
-      //        file = file,
-      //        archive = archive,
-      //        captureu45output = if (captureOutput) Some(FLAG()) else None)
-      //      )
+      override val record =
+        DataRecord(None, Some("java"), JAVA(
+          jobu45tracker = jobTracker,
+          nameu45node = nameNode,
+          mainu45class = mainClass,
+          prepare = prepare,
+          configuration = configBuilderImpl(configuration),
+          javaoption = Seq(DataRecord(jvmOps.getOrElse(""))),
+          arg = args,
+          jobu45xml = jobXml,
+          file = file,
+          archive = archive,
+          captureu45output = if (captureOutput) Some(FLAG()) else None)
+        )
     }
   }
 }
