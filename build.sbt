@@ -3,7 +3,7 @@ import sbtrelease._
 import ReleaseStateTransformations._
 import ReleasePlugin.autoImport._
 import sbt.Keys.scalaVersion
-import sbtassembly.AssemblyKeys._
+//import sbtassembly.AssemblyKeys._
 
 val oozieVersion = "4.2.0"
 val hadoopVersion = "2.7.3"
@@ -77,3 +77,35 @@ scalacOptions ++= Seq(
   "-language:implicitConversions",
   "-language:higherKinds"
 )
+
+releaseProcess := Seq[ReleaseStep](
+  inquireVersions,
+  runClean,
+  setReleaseVersion,
+  commitReleaseVersion,
+  tagRelease,
+  releaseStepTask(assembly),
+  publishArtifacts,
+  setNextVersion,
+  commitNextVersion,
+  pushChanges
+)
+
+publishTo in ThisBuild := {
+  if (version.value.trim.endsWith("SNAPSHOT"))
+    Some(Resolver.file("file", new File("maven-repo/snapshots")))
+  else
+    Some(Resolver.file("file", new File("maven-repo/releases")))
+}
+
+assemblyMergeStrategy in assembly := {
+  case PathList("META-INF", xs@_*) =>
+    xs map {
+      _.toLowerCase
+    } match {
+      case "services" :: _ => MergeStrategy.filterDistinctLines
+      case ("spring.schemas" :: Nil) | ("spring.handlers" :: Nil) => MergeStrategy.filterDistinctLines
+      case _ => MergeStrategy.discard
+    }
+  case _ => MergeStrategy.first
+}
