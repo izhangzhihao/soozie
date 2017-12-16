@@ -14,10 +14,10 @@ object ExecutionUtils {
   }
 
   def removeCoordinatorJob(appName: String, oozieClient: OozieClient): Unit = {
-    import scala.collection.JavaConversions._
-    val coordJobsToRemove = oozieClient.getCoordJobsInfo(s"NAME=$appName", 1, 100).filter {
+    import scala.collection.JavaConverters._
+    val coordJobsToRemove = oozieClient.getCoordJobsInfo(s"NAME=$appName", 1, 100).asScala.filter {
       cj => cj.getAppName == appName && cj.getStatus == Job.Status.RUNNING
-    }.map(_.getId).toSeq
+    }.map(_.getId)
 
     coordJobsToRemove.foreach(oozieClient.kill)
   }

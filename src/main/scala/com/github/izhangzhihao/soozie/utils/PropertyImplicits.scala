@@ -18,11 +18,10 @@ object PropertyImplicits {
     }
 
     def toProperties: Properties = {
-      import scala.collection.JavaConversions._
+      import scala.collection.JavaConverters._
       val properties = new java.util.Properties
-      properties.putAll(map)
+      properties.putAll(map.asJava)
       properties
-
     }
   }
 
