@@ -1,6 +1,6 @@
 package com.github.izhangzhihao.soozie.utils
 
-import com.github.izhangzhihao.soozie.ScoozieConfig
+import com.github.izhangzhihao.soozie.SoozieConfig
 import com.github.izhangzhihao.soozie.conversion.Flatten
 import com.github.izhangzhihao.soozie.dsl.{Node, Workflow}
 import com.github.izhangzhihao.soozie.jobs.{ShellScriptDescriptor, ShellJob}
@@ -18,12 +18,12 @@ object WriterUtils {
                       properties: Option[Map[String, String]] = None): Map[String, String] = {
 
     properties.getOrElse(Map.empty) ++ Map(
-      ScoozieConfig.rootFolderParameterName -> rootPath,
+      SoozieConfig.rootFolderParameterName -> rootPath,
       applicationProperty -> addRootSubstitutionToPath(applicationPath)
     )
   }
 
-  def withXmlExtension(name: String): String = s"$name.${ScoozieConfig.xmlExtension}"
+  def withXmlExtension(name: String): String = s"$name.${SoozieConfig.xmlExtension}"
 
   def generateXml[A: CanWriteXML](xmlObject: A,
                                   scope: String,
@@ -57,17 +57,17 @@ object WriterUtils {
 
   def getShellActionProperties(workflow: Workflow[_]) = findShellActions(workflow)
     .map(descriptor =>
-      createPathProperty(descriptor.name, ScoozieConfig.scriptFolderName, ScoozieConfig.scriptExtension))
+      createPathProperty(descriptor.name, SoozieConfig.scriptFolderName, SoozieConfig.scriptExtension))
     .toMap
 
-  def createPathProperty(name: String, folderName: String, extension: String = ScoozieConfig.xmlExtension): (String, String) = {
+  def createPathProperty(name: String, folderName: String, extension: String = SoozieConfig.xmlExtension): (String, String) = {
     val fileName = s"$name.$extension"
     val substitutedPath = addRootSubstitutionToPath(s"/$folderName/$fileName")
 
     buildPathPropertyName(name) -> substitutedPath
   }
 
-  def addRootSubstitutionToPath(path: String) = "${" + ScoozieConfig.rootFolderParameterName + "}" + path
+  def addRootSubstitutionToPath(path: String) = "${" + SoozieConfig.rootFolderParameterName + "}" + path
 
   def buildPathPropertyName(name: String) = s"${name.replace("-", "_")}_path"
 

@@ -83,7 +83,7 @@ object ShellJob {
           descriptor = None
         )
       case Right(shellScript) =>
-        import com.github.izhangzhihao.soozie.ScoozieConfig._
+        import com.github.izhangzhihao.soozie.SoozieConfig._
         import com.github.izhangzhihao.soozie.utils.PropertyImplicits._
 
         new ShellJob[ACTION](

@@ -7,7 +7,7 @@ import org.apache.oozie.client.OozieClient
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
 
-abstract class ScoozieApp extends App {
+abstract class SoozieApp extends App {
   type Job
   lazy val argumentProperties: Option[Map[String, String]] = {
     if (args nonEmpty) {
@@ -23,7 +23,7 @@ abstract class ScoozieApp extends App {
   val oozieClient: OozieClient
   val fileSystemUtils: FileSystemUtils
   val postProcessing: XmlPostProcessing
-  val usage = "java -cp <...> com.your.scoozie.app.ObjectName -todayString=foo -yesterdayString=foo ..."
+  val usage = "java -cp <...> com.your.soozie.app.ObjectName -todayString=foo -yesterdayString=foo ..."
   val writeResult: Try[Unit]
 
   implicit val executionContext: ExecutionContext

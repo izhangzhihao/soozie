@@ -1,6 +1,6 @@
 package com.github.izhangzhihao.soozie.writer
 
-import com.github.izhangzhihao.soozie.ScoozieConfig._
+import com.github.izhangzhihao.soozie.SoozieConfig._
 
 class PathBuilder(rootFolderPath: String) {
 

@@ -1,6 +1,6 @@
 package com.github.izhangzhihao.soozie.writer
 
-import com.github.izhangzhihao.soozie.ScoozieConfig._
+import com.github.izhangzhihao.soozie.SoozieConfig._
 import com.github.izhangzhihao.soozie.dsl.{Bundle, Coordinator, Workflow}
 import com.github.izhangzhihao.soozie.jobs.ShellScriptDescriptor
 import com.github.izhangzhihao.soozie.utils.WriterImplicitConversions._
@@ -30,7 +30,7 @@ package object implicits {
     protected def writeShellScripts(path: String,
                                     shellActions: List[ShellScriptDescriptor],
                                     fileSystemUtils: FileSystemUtils = LocalFileSystemUtils) = {
-      import com.github.izhangzhihao.soozie.ScoozieConfig._
+      import com.github.izhangzhihao.soozie.SoozieConfig._
       import com.github.izhangzhihao.soozie.utils.SeqImplicits._
 
       val pathBuilder: PathBuilder = new PathBuilder(path)

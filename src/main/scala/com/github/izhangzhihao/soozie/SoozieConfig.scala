@@ -1,6 +1,6 @@
 package com.github.izhangzhihao.soozie
 
-object ScoozieConfig {
+object SoozieConfig {
   val workflowFolderName = "workflows"
   val coordinatorFolderName = "coordinators"
   val bundleFolderName = "bundles"
