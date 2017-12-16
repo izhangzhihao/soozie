@@ -79,8 +79,10 @@ scalacOptions ++= Seq(
 )
 
 releaseProcess := Seq[ReleaseStep](
+  checkSnapshotDependencies,
   inquireVersions,
   runClean,
+  runTest,
   setReleaseVersion,
   commitReleaseVersion,
   tagRelease,
@@ -93,7 +95,7 @@ releaseProcess := Seq[ReleaseStep](
 
 publishTo in ThisBuild := {
   if (version.value.trim.endsWith("SNAPSHOT"))
-    Some(Resolver.file("file", new File("maven-repo/snapshots")))
+    Some("Sonatype Snapshots Nexus" at "https://oss.sonatype.org/content/repositories/snapshots")
   else
     Some(Resolver.file("file", new File("maven-repo/releases")))
 }
