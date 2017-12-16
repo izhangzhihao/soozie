@@ -15,4 +15,4 @@ cache:
     - $HOME/.sbt/boot/
 
 script:
-  - sbt compile
+  - sbt test
