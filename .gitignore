@@ -14,3 +14,4 @@ project/plugins/project/
 
 # IntelliJ specific
 .idea
+src/test/resources
