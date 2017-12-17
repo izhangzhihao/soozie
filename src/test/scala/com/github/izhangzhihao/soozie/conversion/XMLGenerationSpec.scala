@@ -7,7 +7,7 @@ import oozie._
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.{DateTime, DateTimeZone}
 import org.specs2.mutable._
-import oozie.distcp.`package`._
+import oozie.XMLProtocol._
 import scalaxb._
 
 class XMLGenerationSpec extends Specification {

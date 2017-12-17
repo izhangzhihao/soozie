@@ -1,6 +1,6 @@
 package com.github.izhangzhihao.soozie.examples
 
-import oozie.distcp.`package`._
+import oozie.XMLProtocol._
 import oozie.workflow._
 import scalaxb._
 

@@ -3,7 +3,7 @@ package com.github.izhangzhihao.soozie.jobs
 import com.github.izhangzhihao.soozie.dsl.{ConfigBuilder, ConfigurationList, Job}
 import com.github.izhangzhihao.soozie.utils.WriterUtils
 import oozie.shell._
-import oozie.distcp.`package`._
+import oozie.XMLProtocol._
 
 import scalaxb.DataRecord
 

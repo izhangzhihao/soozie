@@ -3,7 +3,7 @@ package com.github.izhangzhihao.soozie.examples
 import com.github.izhangzhihao.soozie.dsl._
 import com.github.izhangzhihao.soozie.jobs.MapReduceJob
 import oozie.workflow.FS
-import oozie.distcp.`package`._
+import oozie.XMLProtocol._
 import scalaxb.DataRecord
 
 object DecisionSamples {

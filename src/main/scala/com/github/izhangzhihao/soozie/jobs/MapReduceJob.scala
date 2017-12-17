@@ -2,7 +2,7 @@ package com.github.izhangzhihao.soozie.jobs
 
 import com.github.izhangzhihao.soozie.dsl._
 import oozie.workflow._
-import oozie.distcp.`package`._
+import oozie.XMLProtocol._
 import scalaxb.DataRecord
 
 object MapReduceJob {

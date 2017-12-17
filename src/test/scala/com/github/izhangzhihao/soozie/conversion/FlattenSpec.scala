@@ -2,7 +2,7 @@ package com.github.izhangzhihao.soozie.conversion
 
 import com.github.izhangzhihao.soozie.dsl._
 import org.specs2.mutable._
-import oozie.distcp.`package`._
+import oozie.XMLProtocol._
 import scalaxb.DataRecord
 
 class FlattenSpec extends Specification {
