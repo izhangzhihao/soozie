@@ -3,7 +3,6 @@ import sbtrelease._
 import ReleaseStateTransformations._
 import ReleasePlugin.autoImport._
 import sbt.Keys.scalaVersion
-//import sbtassembly.AssemblyKeys._
 
 val oozieVersion = "4.2.0"
 val hadoopVersion = "2.7.3"
@@ -92,13 +91,6 @@ releaseProcess := Seq[ReleaseStep](
   commitNextVersion,
   pushChanges
 )
-
-publishTo in ThisBuild := {
-  if (version.value.trim.endsWith("SNAPSHOT"))
-    Some("Sonatype Snapshots Nexus" at "https://oss.sonatype.org/content/repositories/snapshots")
-  else
-    Some(Resolver.file("file", new File("maven-repo/releases")))
-}
 
 assemblyMergeStrategy in assembly := {
   case PathList("META-INF", xs@_*) =>
