@@ -2,7 +2,7 @@ package com.github.izhangzhihao.soozie.examples
 
 import com.github.izhangzhihao.soozie.dsl._
 import com.github.izhangzhihao.soozie.jobs.MapReduceJob
-import oozie.workflow.FS
+import oozie.workflow_0_5.FS
 import oozie.XMLProtocol._
 import scalaxb.DataRecord
 

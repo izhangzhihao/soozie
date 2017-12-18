@@ -751,7 +751,7 @@ trait TestFileSystemUtils extends LocalFileSystemUtils {
         Try(scala.io.Source.fromFile(path).mkString)
     }
 
-    def deleteRecursively(path: String) = {
+    def deleteRecursively(path: String): Try[Boolean] = {
         Try(Path(path).deleteRecursively())
     }
 }

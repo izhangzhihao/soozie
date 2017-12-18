@@ -1,7 +1,7 @@
 package com.github.izhangzhihao.soozie.jobs
 
 import com.github.izhangzhihao.soozie.dsl._
-import oozie.workflow.{JAVA, PREPARE, FLAG, CONFIGURATION, Property2}
+import oozie.workflow_0_5.{JAVA, PREPARE, FLAG, CONFIGURATION, Property2}
 import oozie._
 import oozie.XMLProtocol._
 import scalaxb.DataRecord

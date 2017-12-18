@@ -160,19 +160,19 @@ object Workflow {
   def apply(name: String,
             end: Node,
             parameters: ParameterList = Nil,
-            global: Option[oozie.workflow.GLOBAL] = None,
-            credentials: Option[oozie.workflow.CREDENTIALS] = None,
-            any: Option[oozie.sla.SLAu45INFO] = None): Workflow[oozie.workflow.WORKFLOWu45APP] =
+            global: Option[oozie.workflow_0_5.GLOBAL] = None,
+            credentials: Option[oozie.workflow_0_5.CREDENTIALS] = None,
+            any: Option[oozie.sla_0_2.SLAu45INFO] = None): Workflow[oozie.workflow_0_5.WORKFLOWu45APP] =
     v0_5(name, end, parameters, global, credentials, any)
 
   def v0_5(name: String,
            end: Node,
            parameters: ParameterList = Nil,
-           global: Option[oozie.workflow.GLOBAL] = None,
-           credentials: Option[oozie.workflow.CREDENTIALS] = None,
-           any: Option[oozie.sla.SLAu45INFO] = None): Workflow[oozie.workflow.WORKFLOWu45APP] = {
+           global: Option[oozie.workflow_0_5.GLOBAL] = None,
+           credentials: Option[oozie.workflow_0_5.CREDENTIALS] = None,
+           any: Option[oozie.sla_0_2.SLAu45INFO] = None): Workflow[oozie.workflow_0_5.WORKFLOWu45APP] = {
 
-    import oozie.workflow._
+    import oozie.workflow_0_5._
 
     val actionBuilderImpl = new ActionBuilder[WORKFLOWu45APPOption] {
       def buildAction(name: String,

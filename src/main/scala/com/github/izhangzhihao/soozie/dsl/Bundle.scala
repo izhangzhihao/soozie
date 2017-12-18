@@ -1,6 +1,6 @@
 package com.github.izhangzhihao.soozie.dsl
 
-import oozie.bundle._
+import oozie.bundle_0_2._
 import org.joda.time.DateTime
 
 trait Bundle[B, C, W] extends WritableApplication {

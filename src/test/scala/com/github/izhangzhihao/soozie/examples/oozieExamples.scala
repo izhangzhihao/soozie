@@ -1,7 +1,7 @@
 package com.github.izhangzhihao.soozie.examples
 
 import oozie.XMLProtocol._
-import oozie.workflow._
+import oozie.workflow_0_5._
 import scalaxb._
 
 /* 

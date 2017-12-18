@@ -78,7 +78,7 @@ class XMLGenerationSpec extends Specification {
         }
 
         "be able to successfully generate a coordinator" in {
-            import oozie.coordinator._
+            import oozie.coordinator_0_4._
 
             val timezone = DateTimeZone.forID("America/Los_Angeles")
 
@@ -176,7 +176,7 @@ class XMLGenerationSpec extends Specification {
         }
 
         "given a user created job it should generate the correct workflow" in {
-            import oozie.shell._
+            import oozie.shell_0_3._
 
             case class MyShell(jobName: String = "shell-test") extends Job[ACTION] {
                 override val record: DataRecord[ACTION] = DataRecord(None, Some("shell"), ACTION(

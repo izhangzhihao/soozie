@@ -1,7 +1,7 @@
 package com.github.izhangzhihao.soozie.dsl
 
 import com.github.izhangzhihao.soozie.utils.CronConverter.{CronSubExpr, DayOfMonth, DayOfWeek, Hour, Minute, Month}
-import oozie.coordinator._
+import oozie.coordinator_0_4._
 import org.joda.time.{DateTime, DateTimeZone}
 
 trait Coordinator[C, W] extends WritableApplication {

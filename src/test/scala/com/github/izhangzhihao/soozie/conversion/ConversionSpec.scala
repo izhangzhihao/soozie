@@ -2,7 +2,7 @@ package com.github.izhangzhihao.soozie.conversion
 
 import com.github.izhangzhihao.soozie.dsl._
 import com.github.izhangzhihao.soozie.jobs.MapReduceJob
-import oozie.workflow._
+import oozie.workflow_0_5._
 import org.specs2.mutable._
 import oozie.XMLProtocol._
 import scalaxb._
