@@ -1,7 +1,7 @@
 package com.github.izhangzhihao.soozie.dsl
 
 import scalaxb._
-import oozie.XMLProtocol._
+import oozie._
 
 sealed trait Work {
   def dependsOn(dep1: Dependency, deps: Dependency*): Node = Node(this, List(dep1) ++ deps)

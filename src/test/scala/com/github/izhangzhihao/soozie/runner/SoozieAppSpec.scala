@@ -12,7 +12,7 @@ import org.specs2.mutable.Specification
 import org.specs2.specification.BeforeAfterAll
 import scala.concurrent.Await
 import scala.util.{Failure, Try}
-import oozie.XMLProtocol._
+import oozie._
 
 class SoozieAppSpec extends Specification with BeforeAfterAll with TestHdfsProvider with TestOozieClientProvider {
 

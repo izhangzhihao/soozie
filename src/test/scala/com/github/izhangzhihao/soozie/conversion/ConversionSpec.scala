@@ -4,7 +4,7 @@ import com.github.izhangzhihao.soozie.dsl._
 import com.github.izhangzhihao.soozie.jobs.MapReduceJob
 import oozie.workflow_0_5._
 import org.specs2.mutable._
-import oozie.XMLProtocol._
+import oozie._
 import scalaxb._
 
 class ConversionSpec extends Specification {

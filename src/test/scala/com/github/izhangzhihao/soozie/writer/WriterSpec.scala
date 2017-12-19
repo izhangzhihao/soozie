@@ -8,7 +8,7 @@ import com.github.izhangzhihao.soozie.writer.implicits._
 import org.joda.time.{ DateTime, DateTimeZone }
 import org.specs2.matcher.TryMatchers
 import org.specs2.mutable.Specification
-import oozie.XMLProtocol._
+import oozie._
 import scala.reflect.io.Path
 import scala.util.Try
 

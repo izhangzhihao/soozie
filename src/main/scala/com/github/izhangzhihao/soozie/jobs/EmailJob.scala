@@ -2,7 +2,7 @@ package com.github.izhangzhihao.soozie.jobs
 
 import com.github.izhangzhihao.soozie.dsl.Job
 import oozie.email_0_2._
-import oozie.XMLProtocol._
+import oozie._
 import scalaxb.DataRecord
 
 object EmailJob {

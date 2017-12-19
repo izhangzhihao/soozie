@@ -5,7 +5,6 @@ import oozie.hive_0_5._
 
 import scalaxb._
 import oozie._
-import oozie.XMLProtocol._
 
 object HiveJob {
   def apply(jobName: String,
