@@ -97,7 +97,6 @@ case class GraphNode(var name: String,
         }
 
         actionBuilder.buildDecision(name, defaultName, cases)
-      case _ => ???
     }
 
     Set(result)
