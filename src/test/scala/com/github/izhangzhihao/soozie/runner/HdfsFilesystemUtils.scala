@@ -16,7 +16,7 @@ class HdfsFilesystemUtils(fs: FileSystem) extends FileSystemUtils {
       _ <- Try({
         println(
           s"""Writing: $text
-              |
+             |
              |To: $path
            """.stripMargin)
         out.write(text.getBytes("UTF-8"))

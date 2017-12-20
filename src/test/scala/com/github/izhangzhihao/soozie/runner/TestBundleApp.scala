@@ -19,7 +19,7 @@ class TestBundleApp[B: CanWriteXML, C: CanWriteXML, W: CanWriteXML](override val
 
   implicit override val executionContext: ExecutionContext = scala.concurrent.ExecutionContext.global
 
-  executionResult.onComplete{
+  executionResult.onComplete {
     case Success(_) => println(SoozieConfig.successMessage)
     case Failure(e) => println(s"Application failed with the following error: ${e.getMessage}")
   }

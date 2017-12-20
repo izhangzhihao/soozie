@@ -120,22 +120,27 @@ class SoozieAppSpec extends Specification with BeforeAfterAll with TestHdfsProvi
 }
 
 object OozieClientLike {
+
   implicit object OozieClientLikeLocalCoord extends OozieClientLike[LocalOozieClient, Job] {
     def getJobInfo(oozieClient: LocalOozieClient, jobId: String): Job = oozieClient.getCoordJobInfo(jobId)
   }
+
 }
 
 object Fixtures {
-  def workflow(name: String) = {
-    val end = End dependsOn Start
-    Workflow(name, end)
-  }
-
   // Currently this throws an xml parse error when submitting the job to oozie. Ideally Soozie should catch this at
   // compile time.
   def workflowWithErrorOnSubmit(name: String) = {
     val end = End dependsOn ShellJob("</", Right(ShellScript("this script throws an error"))).dependsOn(Start)
     Workflow(name, end)
+  }
+
+  def bundle(name: String) = {
+    Bundle(
+      name = name,
+      coordinators = List(CoordinatorDescriptor("my-coord", coordinator("my-coord"))),
+      kickoffTime = Left[DateTime, String](DateTime.now())
+    )
   }
 
   def coordinator(name: String) = {
@@ -151,11 +156,8 @@ object Fixtures {
     )
   }
 
-  def bundle(name: String) = {
-    Bundle(
-      name = name,
-      coordinators = List(CoordinatorDescriptor("my-coord", coordinator("my-coord"))),
-      kickoffTime = Left[DateTime, String](DateTime.now())
-    )
+  def workflow(name: String) = {
+    val end = End dependsOn Start
+    Workflow(name, end)
   }
 }
