@@ -6,6 +6,7 @@ import oozie.workflow_0_5.FS
 import oozie._
 import scalaxb.DataRecord
 
+//noinspection TypeAnnotation
 object DecisionSamples {
 
   val FirstJob = MapReduceJob("foo") dependsOn Start
@@ -36,6 +37,7 @@ object DecisionSamples {
   }
 }
 
+//noinspection TypeAnnotation
 object SimpleSamples {
   val TestSubWorkflow = {
     val first = MapReduceJob("start") dependsOn Start
@@ -300,11 +302,12 @@ object SimpleSamples {
     Workflow("simple", end)
   }
 
-  def CustomErrorTo = {
+  def CustomErrorTo() = {
     val first = MapReduceJob("first") dependsOn Start
     val errorPath = MapReduceJob("error") dependsOn (first error)
     val second = MapReduceJob("second") dependsOn first
     val end = End dependsOn OneOf(second, errorPath)
+    Workflow("CustomError", end)
   }
 
   def SubWfExample = {
