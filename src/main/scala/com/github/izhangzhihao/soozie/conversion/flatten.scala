@@ -151,7 +151,7 @@ object Flatten {
                   //add in new decisionAfter
                   lastNode.decisionAfter ++= RefSet(after.toSeq)
                   after foreach (after => {
-                    after.decisionRoutes = (after.decisionRoutes ++ decisionRoutes)
+                    after.decisionRoutes = after.decisionRoutes ++ decisionRoutes
                   })
                   lastNode.after = RefSet()
                 }
@@ -178,7 +178,7 @@ object Flatten {
                           after = RefSet(),
                           decisionAfter = RefSet(after.toSeq))
                         accum += currDep -> newNode
-                        deps.toList foreach (flatten0(_, Set(newNode), inDecision))
+                        deps foreach (flatten0(_, Set(newNode), inDecision))
                       case _ =>
                         flatten0(currDep, after, inDecision = true)
                     }
@@ -201,7 +201,6 @@ object Flatten {
                       after foreach (_.before += newNode)
                       accum += node -> newNode
                       deps foreach (flatten0(_, Set(newNode)))
-                    case _ => ???
                   }
               }
 
@@ -287,7 +286,7 @@ object Flatten {
     var accum = RefMap[Dependency, GraphNode](Map.empty)
 
     def makeSuffix(nodes: RefSet[GraphNode]): String = {
-      (nodes.map((currNode: GraphNode) => currNode.name)).toList.sorted mkString "-"
+      nodes.map((currNode: GraphNode) => currNode.name).toList.sorted mkString "-"
     }
 
     for (node <- nodes.values) {
@@ -309,7 +308,7 @@ object Flatten {
       }
     }
     //check if we need a fork at the start of the workflow
-    val firstNodes = RefSet((nodes.values.toSet filter (isStartNode(_))).toList)
+    val firstNodes = RefSet((nodes.values.toSet filter isStartNode).toList)
     if (firstNodes.size > 1) {
       val forkName = s"fork-${makeSuffix(firstNodes)}"
       val fork = GraphNode(forkName, WorkflowFork, RefSet(), firstNodes)
@@ -317,7 +316,7 @@ object Flatten {
       accum += ForkDependency(forkName) -> fork
     }
     //check if we need a join at the end of the workflow
-    val lastNodes = RefSet((nodes.values.toSet filter (isEndNode(_))).toList)
+    val lastNodes = RefSet((nodes.values.toSet filter isEndNode).toList)
     if (lastNodes.size > 1) {
       val joinName = s"join-${makeSuffix(lastNodes)}"
       val join = GraphNode(joinName, WorkflowJoin, lastNodes, RefSet())
@@ -403,7 +402,7 @@ object Flatten {
   def fixDuplicateNames(nodes: List[GraphNode]): List[GraphNode] = {
     val refSet = RefSet(nodes)
     val partiallyOrdered = Conversion.order(refSet)
-    val orderedNodes: List[GraphNode] = (partiallyOrdered.toList sortWith (PartiallyOrderedNode.lt) map (_.node))
+    val orderedNodes: List[GraphNode] = partiallyOrdered.toList sortWith PartiallyOrderedNode.lt map (_.node)
     //get the nodes with duplicates in order from "bottom" to "top"
     var nodesToRename = orderedNodes.reverse filter (n => hasDuplicates(orderedNodes, n.name))
     nodesToRename = removeEndingDigits(nodesToRename)

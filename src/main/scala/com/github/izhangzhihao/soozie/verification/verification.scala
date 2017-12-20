@@ -85,7 +85,7 @@ object Verification {
     }
     var resultGraph = graph
     while (getBadJoins(resultGraph).nonEmpty) {
-      val startNodes = (resultGraph filter (n => Flatten.isStartNode(n))).toSet
+      val startNodes = resultGraph filter (n => Flatten.isStartNode(n))
       val vNodes = generateVerificationNodes(startNodes)
       val badJoin: VerificationNode = getFirstBadJoin(resultGraph)
       //try just adding a join - simple case
@@ -116,9 +116,8 @@ object Verification {
       val currNode = currentNode
       currNode.graphNode.workflowOption match {
         //if fork, we're on a new parent thread. Push this thread onto the stack
-        case WorkflowFork => {
+        case WorkflowFork =>
           currNode.graphNode.after foreach (n => getBadJoins0(VerificationNode(n, currNode.parentThreads :+ ForkThread(currNode.graphNode, n))))
-        }
         //if join, we've closed a thread, so pop the thread off the stack
         case WorkflowJoin => {
           //validate that all nodes coming into the join are on same thread
@@ -148,15 +147,12 @@ object Verification {
 
     def generateVerificationNodes0(currNode: VerificationNode): Set[VerificationNode] = {
       val newParentThreads = currNode.graphNode.workflowOption match {
-        case WorkflowFork => {
+        case WorkflowFork =>
           currNode.parentThreads :+ ForkThread(currNode.graphNode, currNode.graphNode.after.head)
-        }
-        case WorkflowJoin => {
+        case WorkflowJoin =>
           currNode.parentThreads.init
-        }
-        case _ => {
+        case _ =>
           currNode.parentThreads
-        }
       }
       (Set(currNode) /: currNode.graphNode.after) ((e1, e2) => e1 ++ generateVerificationNodes0(VerificationNode(e2, newParentThreads)))
     }
@@ -173,8 +169,8 @@ object Verification {
     val badJoinsGraphNodes = badJoins map (_.graphNode)
     //work "down" through the graph do get the first bad join
     val orderedGraph: Set[PartiallyOrderedNode] = Conversion.order(RefSet(graph.toSeq))
-    val partiallyOrderedBadJoins = (orderedGraph filter (n => badJoinsGraphNodes contains n.node))
-    val orderedBadJoinsGraphNodes: List[GraphNode] = partiallyOrderedBadJoins.toList sortWith (PartiallyOrderedNode.lt) map (_.node)
+    val partiallyOrderedBadJoins = orderedGraph filter (n => badJoinsGraphNodes contains n.node)
+    val orderedBadJoinsGraphNodes: List[GraphNode] = partiallyOrderedBadJoins.toList sortWith PartiallyOrderedNode.lt map (_.node)
     val orderedBadJoins: List[VerificationNode] = orderedBadJoinsGraphNodes map (n => VerificationNode(n, badJoins.find(gn => gn.graphNode == n).get.parentThreads))
     orderedBadJoins.head
   }
@@ -189,7 +185,7 @@ object Verification {
     //build up the set of threads that are coming into this bad join
     val badJoinParentForks: Set[GraphNode] = parentVNodes map (_.parentThreads.last.fork)
     //find the first node that has the same parent fork as others
-    val firstNodeToJoin: Option[VerificationNode] = parentVNodes find (n => (parentVNodes filter (n2 => n2.parentThreads.last.fork == n.parentThreads.last.fork)).size > 1)
+    val firstNodeToJoin: Option[VerificationNode] = parentVNodes find (n => (parentVNodes count (n2 => n2.parentThreads.last.fork == n.parentThreads.last.fork)) > 1)
 
     firstNodeToJoin match {
       case Some(headNode) => //then simply join the nodes on the same thread
@@ -199,7 +195,7 @@ object Verification {
         val newJoin = GraphNode(
           "join" + {
             var nameStr = ""
-            toJoin map (nameStr += "-" + _.name)
+            toJoin foreach (nameStr += "-" + _.name)
             nameStr
           },
           workflowOption = WorkflowJoin,
