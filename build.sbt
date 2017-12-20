@@ -21,7 +21,8 @@ libraryDependencies ++= Seq(
   "com.github.sakserv" % "hadoop-mini-clusters-hdfs" % hadoopMiniClusterVersion % "test",
   "org.apache.hadoop" % "hadoop-hdfs" % hadoopVersion % "test" classifier "tests",
   "org.apache.hadoop" % "hadoop-common" % hadoopVersion % "test" classifier "tests",
-  "com.github.jacoby6000" %% "retry" % "0.3.0"
+  "com.github.jacoby6000" %% "retry" % "0.3.0",
+  "org.scalaz" %% "scalaz-core" % "7.2.17"
 )
 
 dependencyOverrides ++= Seq(

@@ -63,7 +63,7 @@ package object implicits {
 
       import com.github.izhangzhihao.soozie.utils.PropertyImplicits._
 
-      val propertiesString = (getJobProperties(path, properties)).toProperties.toWritableString
+      val propertiesString = getJobProperties(path, properties).toProperties.toWritableString
 
       for {
         _ <- fileSystemUtils.makeDirectory(getTargetFolderPath)
@@ -76,13 +76,14 @@ package object implicits {
 
     override def getJobProperties(path: String,
                                   properties: Option[Map[String, String]] = None): Map[String, String] = {
-      val pathBuilder: PathBuilder = new PathBuilder(path)
+      import scalaz._
+      import Scalaz._
 
       buildProperties(
         path,
         OozieClient.APP_PATH,
         s"/$workflowFolderName/${withXmlExtension(underlying.name)}",
-        (properties ++ Some(getShellActionProperties(underlying))).headOption)
+        properties |+| Some(getShellActionProperties(underlying)))
     }
 
     override def toXml(xmlPostProcessing: XmlPostProcessing = XmlPostProcessing.Default) = underlying.toXmlString(xmlPostProcessing)

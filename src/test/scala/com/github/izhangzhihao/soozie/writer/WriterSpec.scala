@@ -15,6 +15,7 @@ import scala.util.Try
 class WriterSpec extends Specification with TryMatchers {
     val resourcePath = "src/test/resources/"
     val testFolder = s"$resourcePath/writer-tests"
+    val hdfsPath = "${nameNode}/user/${user.name}/"
 
     TestFileSystemUtils.makeDirectory(resourcePath)
     TestFileSystemUtils.deleteRecursively(testFolder)
@@ -72,7 +73,9 @@ class WriterSpec extends Specification with TryMatchers {
 
             val result: Try[Unit] = workflow.writeJob(
                 path = currentTestFolder,
-                fileSystemUtils = TestFileSystemUtils)
+                fileSystemUtils = TestFileSystemUtils,
+                properties = Option(Map("nameNode" -> """hdfs://node1.domain:8020""", "jobTracker" -> """node3.domain:8050""","hdfs_path"->hdfsPath))
+            )
 
             result.isSuccess must_== true
             TestFileSystemUtils.ls(s"$currentTestFolder").get.map(_.getName).toSeq must contain("workflows", "job.properties", "bin")
@@ -86,7 +89,11 @@ class WriterSpec extends Specification with TryMatchers {
               .get must_== true
             TestFileSystemUtils
               .readTextFile(s"$currentTestFolder/job.properties")
-              .map(xml => xml.contains("test_shell_path=${rootFolder_path}/bin/test-shell.sh"))
+              .map(xml => xml.contains("test_shell_path=${hdfs_path}/bin/test-shell.sh"))
+              .get must_== true
+            TestFileSystemUtils
+              .readTextFile(s"$currentTestFolder/job.properties")
+              .map(xml => xml.contains("hdfs_path=${nameNode}/user/${user.name}/"))
               .get must_== true
         }
 
@@ -107,7 +114,9 @@ class WriterSpec extends Specification with TryMatchers {
 
             val result: Try[Unit] = workflow.writeJob(
                 path = currentTestFolder,
-                fileSystemUtils = TestFileSystemUtils)
+                fileSystemUtils = TestFileSystemUtils,
+                properties = Option(Map("nameNode" -> """hdfs://node1.domain:8020""", "jobTracker" -> """node3.domain:8050""","hdfs_path"->hdfsPath))
+            )
 
             result.isSuccess must_== true
             TestFileSystemUtils.ls(s"$currentTestFolder").get.map(_.getName).toSeq must contain("workflows", "job.properties", "bin")
@@ -129,10 +138,14 @@ class WriterSpec extends Specification with TryMatchers {
             TestFileSystemUtils
               .readTextFile(s"$currentTestFolder/job.properties")
               .map(xml =>
-                  xml.contains("test_shell_path=${rootFolder_path}/bin/test-shell.sh")
-                    && xml.contains("test_shell_2_path=${rootFolder_path}/bin/test-shell-2.sh")
-                    && xml.contains("test_shell_3_path=${rootFolder_path}/bin/test-shell-3.sh")
-                    && xml.contains("test_shell_4_path=${rootFolder_path}/bin/test-shell-4.sh"))
+                  xml.contains("test_shell_path=${hdfs_path}/bin/test-shell.sh")
+                    && xml.contains("test_shell_2_path=${hdfs_path}/bin/test-shell-2.sh")
+                    && xml.contains("test_shell_3_path=${hdfs_path}/bin/test-shell-3.sh")
+                    && xml.contains("test_shell_4_path=${hdfs_path}/bin/test-shell-4.sh"))
+              .get must_== true
+            TestFileSystemUtils
+              .readTextFile(s"$currentTestFolder/job.properties")
+              .map(xml => xml.contains("hdfs_path=${nameNode}/user/${user.name}/"))
               .get must_== true
         }
     }
@@ -260,7 +273,9 @@ class WriterSpec extends Specification with TryMatchers {
 
           val result: Try[Unit] = coordinator.writeJob(
             path = currentTestFolder,
-            fileSystemUtils = TestFileSystemUtils)
+            fileSystemUtils = TestFileSystemUtils,
+              properties = Option(Map("nameNode" -> """hdfs://node1.domain:8020""", "jobTracker" -> """node3.domain:8050""","hdfs_path"->hdfsPath))
+          )
 
           result.isSuccess must_== true
           TestFileSystemUtils.ls(s"$currentTestFolder").get.map(_.getName).toSeq must
@@ -281,8 +296,12 @@ class WriterSpec extends Specification with TryMatchers {
             .get must_== true
           TestFileSystemUtils
             .readTextFile(s"$currentTestFolder/job.properties")
-            .map(xml => xml.contains("test_shell_path=${rootFolder_path}/bin/test-shell.sh"))
+            .map(xml => xml.contains("test_shell_path=${hdfs_path}/bin/test-shell.sh"))
             .get must_== true
+            TestFileSystemUtils
+              .readTextFile(s"$currentTestFolder/job.properties")
+              .map(xml => xml.contains("hdfs_path=${nameNode}/user/${user.name}/"))
+              .get must_== true
         }
 
         "throw an exception if the workflow path is specified and a write job is attempted" in {
@@ -567,7 +586,9 @@ class WriterSpec extends Specification with TryMatchers {
 
           val result: Try[Unit] = bundle.writeJob(
             path = currentTestFolder,
-            fileSystemUtils = TestFileSystemUtils)
+            fileSystemUtils = TestFileSystemUtils,
+              properties = Option(Map("nameNode" -> """hdfs://node1.domain:8020""", "jobTracker" -> """node3.domain:8050""","hdfs_path"->hdfsPath))
+          )
 
           result.isSuccess must_== true
           TestFileSystemUtils.ls(s"$currentTestFolder").get.map(_.getName).toSeq must
@@ -593,8 +614,12 @@ class WriterSpec extends Specification with TryMatchers {
             .get must_== true
           TestFileSystemUtils
             .readTextFile(s"$currentTestFolder/job.properties")
-            .map(xml => xml.contains("test_shell_path=${rootFolder_path}/bin/test-shell.sh"))
+            .map(xml => xml.contains("test_shell_path=${hdfs_path}/bin/test-shell.sh"))
             .get must_== true
+            TestFileSystemUtils
+              .readTextFile(s"$currentTestFolder/job.properties")
+              .map(xml => xml.contains("hdfs_path=${nameNode}/user/${user.name}/"))
+              .get must_== true
       }
 
         "write a bundle job with multiple coordinators and multiple workflow to the correct path" in {

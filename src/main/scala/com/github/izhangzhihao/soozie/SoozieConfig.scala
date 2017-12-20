@@ -5,7 +5,7 @@ object SoozieConfig {
   val coordinatorFolderName = "coordinators"
   val bundleFolderName = "bundles"
   val propertyFileName = "job.properties"
-  val rootFolderParameterName = "rootFolder_path"
+  val hdfsFolderPath = "hdfs_path"
   val shellScriptPathParameterSuffix = "script_path"
   val scriptFolderName = "bin"
   val scriptExtension = "sh"

@@ -18,8 +18,7 @@ object WriterUtils {
                       properties: Option[Map[String, String]] = None): Map[String, String] = {
 
     properties.getOrElse(Map.empty) ++ Map(
-      SoozieConfig.rootFolderParameterName -> rootPath,
-      applicationProperty -> addRootSubstitutionToPath(applicationPath)
+      applicationProperty -> addHDFSRootSubstitutionToPath(applicationPath)
     )
   }
 
@@ -62,12 +61,12 @@ object WriterUtils {
 
   def createPathProperty(name: String, folderName: String, extension: String = SoozieConfig.xmlExtension): (String, String) = {
     val fileName = s"$name.$extension"
-    val substitutedPath = addRootSubstitutionToPath(s"/$folderName/$fileName")
+    val substitutedPath = addHDFSRootSubstitutionToPath(s"/$folderName/$fileName")
 
     buildPathPropertyName(name) -> substitutedPath
   }
 
-  def addRootSubstitutionToPath(path: String) = "${" + SoozieConfig.rootFolderParameterName + "}" + path
+  def addHDFSRootSubstitutionToPath(path: String) = "${" + SoozieConfig.hdfsFolderPath + "}" + path
 
   def buildPathPropertyName(name: String) = s"${name.replace("-", "_")}_path"
 
