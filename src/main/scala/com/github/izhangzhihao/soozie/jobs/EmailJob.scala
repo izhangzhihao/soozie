@@ -24,7 +24,7 @@ object EmailJob {
     attachment
   )
 
-  def v0_1(jobName: String,
+  def v0_1(jobname: String,
            to: String,
            subject: String,
            body: String,
@@ -32,11 +32,8 @@ object EmailJob {
            bcc: Option[String] = None,
            contentType: Option[String] = None,
            attachment: Option[String] = None): Job[ACTION] = {
-
-    val _jobName = jobName
-
     new Job[ACTION] {
-      override val jobName = _jobName
+      override val jobName = jobname
       override val record: DataRecord[ACTION] =
         DataRecord(None, Some("email"), ACTION(
           to = to,

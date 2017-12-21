@@ -34,7 +34,7 @@ object JavaJob {
     )
   }
 
-  def v0_5(jobName: String,
+  def v0_5(jobname: String,
            mainClass: String,
            jobTracker: Option[String] = None,
            nameNode: Option[String] = None,
@@ -52,11 +52,8 @@ object JavaJob {
 
       override def buildProperty(name: String, value: String, description: Option[String]): Property2 = Property2(name, value, description)
     }
-
-    val _jobName = jobName
-
     new Job[JAVA] {
-      override val jobName = _jobName
+      override val jobName = jobname
       override val record =
         DataRecord(None, Some("java"), JAVA(
           jobu45tracker = jobTracker,

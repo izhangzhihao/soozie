@@ -37,7 +37,7 @@ object SqoopJob {
         Property(name, value, description)
     }
     new Job[ACTION] {
-      override val jobName = s"sqoop_$jobname"
+      override val jobName = jobname
       override val record =
         DataRecord(None, Some("sqoop"), ACTION(
           jobu45tracker = jobTracker,

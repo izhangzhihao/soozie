@@ -30,7 +30,7 @@ object MapReduceJob {
     )
   }
 
-  def v0_5(jobName: String,
+  def v0_5(jobname: String,
            nameNode: Option[String] = None,
            jobTracker: Option[String] = None,
            prepare: Option[PREPARE] = None,
@@ -40,9 +40,6 @@ object MapReduceJob {
            configClass: Option[String] = None,
            file: Seq[String] = Nil,
            archive: Seq[String] = Nil): Job[MAPu45REDUCE] = {
-
-    val _jobName = jobName
-
     val configBuilderImpl = new ConfigBuilder[CONFIGURATION, Property2] {
       override def build(property: Seq[Property2]): CONFIGURATION = CONFIGURATION(property)
 
@@ -50,19 +47,19 @@ object MapReduceJob {
     }
 
     new Job[MAPu45REDUCE] {
-      override val jobName = _jobName
+      override val jobName = jobname
       override val record =
-              DataRecord(None, Some("map-reduce"), MAPu45REDUCE(
-                jobu45tracker = jobTracker,
-                nameu45node = nameNode,
-                prepare = prepare,
-                configuration = configBuilderImpl(configuration),
-                mapu45reduceoption = mapReduceOption,
-                jobu45xml = jobXml,
-                configu45class = configClass,
-                file = file,
-                archive = archive
-              ))
+        DataRecord(None, Some("map-reduce"), MAPu45REDUCE(
+          jobu45tracker = jobTracker,
+          nameu45node = nameNode,
+          prepare = prepare,
+          configuration = configBuilderImpl(configuration),
+          mapu45reduceoption = mapReduceOption,
+          jobu45xml = jobXml,
+          configu45class = configClass,
+          file = file,
+          archive = archive
+        ))
     }
   }
 }

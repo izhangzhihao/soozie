@@ -40,7 +40,7 @@ object ShellJob {
     captureOutput
   )
 
-  def v0_3(jobName: String,
+  def v0_3(jobname: String,
            exec: Either[String, ShellScript],
            jobTracker: Option[String] = None,
            nameNode: Option[String] = None,
@@ -58,13 +58,10 @@ object ShellJob {
 
       override def buildProperty(name: String, value: String, description: Option[String]): Property = Property(name, value, description)
     }
-
-    val _jobName = jobName
-
     exec match {
       case Left(oozieExecString) =>
         new ShellJob[ACTION](
-          jobName = _jobName,
+          jobName = jobname,
           record =
             DataRecord(None, Some("shell"),
               ACTION(
@@ -88,7 +85,7 @@ object ShellJob {
         import com.github.izhangzhihao.soozie.utils.PropertyImplicits._
 
         new ShellJob[ACTION](
-          jobName = _jobName,
+          jobName = jobname,
           record =
             DataRecord(None, Some("shell"), ACTION(
               jobu45tracker = jobTracker,
@@ -96,15 +93,15 @@ object ShellJob {
               prepare = prepare,
               jobu45xml = jobXml,
               configuration = configBuilderImpl(configuration),
-              exec = s"$jobName.$scriptExtension",
+              exec = s"$jobname.$scriptExtension",
               argument = arguments,
               envu45var = environmentVariables,
-              file = file ++ Seq(s"${WriterUtils.buildPathPropertyName(jobName).toParameter}#$jobName.$scriptExtension"),
+              file = file ++ Seq(s"${WriterUtils.buildPathPropertyName(jobname).toParameter}#$jobname.$scriptExtension"),
               archive = archive,
               captureu45output = if (captureOutput) Some(FLAG()) else None,
               xmlns = "uri:oozie:shell-action:0.3")
             ),
-          descriptor = Some(ShellScriptDescriptor(jobName, shellScript.script))
+          descriptor = Some(ShellScriptDescriptor(jobname, shellScript.script))
         )
     }
   }

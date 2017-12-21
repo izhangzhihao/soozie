@@ -32,7 +32,7 @@ object HiveJob {
     archive
   )
 
-  def v0_5(jobName: String,
+  def v0_5(jobname: String,
            fileName: String,
            nameNode: Option[String] = None,
            jobTracker: Option[String] = None,
@@ -52,14 +52,7 @@ object HiveJob {
     }
 
     new Job[ACTION] {
-      val dotIndex = fileName.indexOf(".")
-      val cleanName = {
-        if (dotIndex > 0)
-          fileName.substring(0, dotIndex)
-        else
-          fileName
-      }
-      override val jobName = s"hive_$cleanName"
+      override val jobName = jobname
       override val record =
         DataRecord(None, Some("hive"), ACTION(
           script = fileName,
