@@ -6,7 +6,7 @@ import com.github.izhangzhihao.soozie.dsl.Predicates
 import com.github.izhangzhihao.soozie.dsl._
 import com.github.izhangzhihao.soozie.utils.WriterUtils
 import com.github.izhangzhihao.soozie.verification.Verification
-import org.joda.time.{DateTimeZone, DateTime}
+import org.joda.time.{DateTime, DateTimeZone}
 import scalaxb._
 
 case class PartiallyOrderedNode(node: GraphNode,
@@ -112,7 +112,7 @@ case class GraphNode(var name: String,
 */
   private def nameRoutes(predicateRoutes: List[String]): String = {
     this.workflowOption match {
-      case WorkflowDecision(predicates, decisionNode) =>
+      case WorkflowDecision(_, decisionNode) =>
         predicateRoutes map { predicateRoute =>
           decisionAfter.find(_.containsDecisionRoute(predicateRoute, decisionNode)) match {
             case Some(routeNode) => routeNode.name

@@ -26,7 +26,7 @@ object Verification {
 
   def verifyDecisions(graph: Set[GraphNode]): Boolean = {
     val decisions: Set[GraphNode] = graph filter (node => node.workflowOption match {
-      case dec@WorkflowDecision(predicates, _) => true
+      case WorkflowDecision(_, _) => true
       case _ => false
     })
     //verify that each predicate is represented
@@ -44,7 +44,7 @@ object Verification {
       }
       val optionsPresent = foundOptions.toSet == predicates.toSet
       val defaultPresent = dec.workflowOption match {
-        case WorkflowDecision(predicates, myDecNode) =>
+        case WorkflowDecision(_, myDecNode) =>
           dec.decisionAfter.exists(_.decisionRoutes exists {
             case (route, decisionNode) => route == "default" && decisionNode == myDecNode
           })
@@ -73,7 +73,7 @@ object Verification {
 * Reworks graph to create workflow that oozie will allow
 * Should only be used if verifyForkJoins fails
 */
-  def repairForkJoins(graph: Set[GraphNode], repairAutomatically: Boolean = false, defaultPath: String = "${outputDataRoot}"): Set[GraphNode] = {
+  def repairForkJoins(graph: Set[GraphNode], repairAutomatically: Boolean = false): Set[GraphNode] = {
     val ln = Source.stdin.getLines
     if (!repairAutomatically) {
       println("worflow fork/join structure not allowed by oozie runtime - repair? (y/n)")
@@ -183,7 +183,7 @@ object Verification {
     var resultGraph = graph
     val parentVNodes: Set[VerificationNode] = badJoin.graphNode.before map ((currNode: GraphNode) => getVNode(vNodes, currNode))
     //build up the set of threads that are coming into this bad join
-    val badJoinParentForks: Set[GraphNode] = parentVNodes map (_.parentThreads.last.fork)
+    //val badJoinParentForks: Set[GraphNode] = parentVNodes map (_.parentThreads.last.fork)
     //find the first node that has the same parent fork as others
     val firstNodeToJoin: Option[VerificationNode] = parentVNodes find (n => (parentVNodes count (n2 => n2.parentThreads.last.fork == n.parentThreads.last.fork)) > 1)
 

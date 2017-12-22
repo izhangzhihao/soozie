@@ -12,11 +12,9 @@ import scalaxb.CanWriteXML
 import scalaxb.`package`._
 
 object WriterUtils {
-  def buildProperties(rootPath: String,
-                      applicationProperty: String,
+  def buildProperties(applicationProperty: String,
                       applicationPath: String,
                       properties: Option[Map[String, String]] = None): Map[String, String] = {
-
     properties.getOrElse(Map.empty) ++ Map(
       applicationProperty -> addHDFSRootSubstitutionToPath(applicationPath)
     )

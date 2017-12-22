@@ -95,12 +95,12 @@ object Flatten {
 
     var accum: RefMap[Dependency, GraphNode] = RefMap[Dependency, GraphNode](Map.empty)
 
-    def flatten0(currentDep: Dependency, after: Set[GraphNode], inDecision: Boolean = false) {
+    def flatten0(currentDep: Dependency, after: Set[GraphNode], inDecision: Boolean = false): Unit = {
       accum get currentDep match {
         //check if we've already processed the dependency. If so, just update after to include where we came from
         case Some(alreadyThere) =>
           currentDep match {
-            case DecisionNode(decision, dependencies) =>
+            case DecisionNode(_, _) =>
               alreadyThere.decisionAfter ++= RefSet(after.toSeq)
             case _ =>
               after foreach (alreadyThere.after += _)
@@ -242,14 +242,14 @@ object Flatten {
     results ++ additionalControlNodes
   }
 
-  def updateDecisionNames(nodes: List[GraphNode]) {
+  def updateDecisionNames(nodes: List[GraphNode]): Unit = {
     val refSet = RefSet(nodes)
     val ordered = Conversion.order(refSet)
     val nodesToRename = ordered.toList sortBy (_.partialOrder) map (_.node) reverse
 
     nodesToRename foreach { node =>
       node.workflowOption match {
-        case WorkflowDecision(predicates, decisionNode) =>
+        case WorkflowDecision(predicates, _) =>
           node.name = "decision-" + node.getDecisionName(predicates map (_._1))
         case _ =>
       }

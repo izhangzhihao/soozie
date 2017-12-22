@@ -149,7 +149,7 @@ object CronConverter {
   implicit def intToCronSubExpr[T <: TimeUnit](i: Int)(implicit timeUnit: T): CronSubExpr[T] =
     new CronSubExpr[T](Set(i to i))(timeUnit)
 
-  implicit def intToRange[T <% Int](i: T): Range = Range.inclusive(i, i)
+  implicit def intToRange[T <: Int](i: T): Range = Range.inclusive(i, i)
 
   implicit def intSetToCronSubExpr[T <: TimeUnit](s: Set[Int])(implicit timeUnit: T): CronSubExpr[T] =
     new CronSubExpr[T](s map (i => i to i))(timeUnit)

@@ -10,40 +10,40 @@ import org.apache.oozie.client.OozieClient
 import scala.util.Try
 import scalaxb.CanWriteXML
 
-package object implicits {
+trait CanWrite {
+  def toXml(xmlPostProcessing: XmlPostProcessing = XmlPostProcessing.Default): String
 
-  trait CanWrite {
-    def toXml(xmlPostProcessing: XmlPostProcessing = XmlPostProcessing.Default): String
+  def write(path: String,
+            fileSystemUtils: FileSystemUtils = LocalFileSystemUtils,
+            xmlPostProcessing: XmlPostProcessing = XmlPostProcessing.Default): Try[Unit]
 
-    def write(path: String,
-              fileSystemUtils: FileSystemUtils = LocalFileSystemUtils,
-              xmlPostProcessing: XmlPostProcessing = XmlPostProcessing.Default): Try[Unit]
+  def writeJob(path: String,
+               properties: Option[Map[String, String]] = None,
+               fileSystemUtils: FileSystemUtils = LocalFileSystemUtils,
+               xmlPostProcessing: XmlPostProcessing = XmlPostProcessing.Default): Try[Unit]
 
-    def writeJob(path: String,
-                 properties: Option[Map[String, String]] = None,
-                 fileSystemUtils: FileSystemUtils = LocalFileSystemUtils,
-                 xmlPostProcessing: XmlPostProcessing = XmlPostProcessing.Default): Try[Unit]
+  def getJobProperties(path: String,
+                       properties: Option[Map[String, String]] = None): Map[String, String]
 
-    def getJobProperties(path: String,
-                         properties: Option[Map[String, String]] = None): Map[String, String]
+  protected def writeShellScripts(path: String,
+                                  shellActions: List[ShellScriptDescriptor],
+                                  fileSystemUtils: FileSystemUtils = LocalFileSystemUtils) = {
+    import com.github.izhangzhihao.soozie.SoozieConfig._
+    import com.github.izhangzhihao.soozie.utils.SeqImplicits._
 
-    protected def writeShellScripts(path: String,
-                                    shellActions: List[ShellScriptDescriptor],
-                                    fileSystemUtils: FileSystemUtils = LocalFileSystemUtils) = {
-      import com.github.izhangzhihao.soozie.SoozieConfig._
-      import com.github.izhangzhihao.soozie.utils.SeqImplicits._
+    val pathBuilder: PathBuilder = new PathBuilder(path)
+    import pathBuilder._
 
-      val pathBuilder: PathBuilder = new PathBuilder(path)
-      import pathBuilder._
-
-      for {
-        _ <- fileSystemUtils.makeDirectory(getScriptsFolderPath)
-        _ <- sequenceTry(shellActions.map(descriptor =>
-          fileSystemUtils
-            .writeTextFile(getScriptFilePath(s"${descriptor.name}.$scriptExtension"), descriptor.script)))
-      } yield ()
-    }
+    for {
+      _ <- fileSystemUtils.makeDirectory(getScriptsFolderPath)
+      _ <- sequenceTry(shellActions.map(descriptor =>
+        fileSystemUtils
+          .writeTextFile(getScriptFilePath(s"${descriptor.name}.$scriptExtension"), descriptor.script)))
+    } yield ()
   }
+}
+
+package object implicits {
 
   implicit class WorkflowWriter[W: CanWriteXML](underlying: Workflow[W]) extends CanWrite {
     override def write(path: String,
@@ -80,7 +80,6 @@ package object implicits {
       import Scalaz._
 
       buildProperties(
-        path,
         OozieClient.APP_PATH,
         s"/$workflowFolderName/${withXmlExtension(underlying.name)}",
         properties |+| Some(getShellActionProperties(underlying)))
@@ -136,7 +135,6 @@ package object implicits {
       val workflowName = underlying.workflow.name
 
       buildProperties(
-        rootPath = path,
         applicationProperty = OozieClient.COORDINATOR_APP_PATH,
         applicationPath = s"/$coordinatorFolderName/$coordinatorFilename",
         properties =
@@ -237,7 +235,6 @@ package object implicits {
       }).toSet
 
       buildProperties(
-        rootPath = path,
         applicationProperty = OozieClient.BUNDLE_APP_PATH,
         applicationPath = s"/$bundleFolderName/$bundleFileName",
         properties = Some(properties.getOrElse(Map[String, String]()) ++ pathProperties))

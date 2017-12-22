@@ -15,7 +15,6 @@ object HiveJob {
             parameters: List[String] = Nil,
             prepare: Option[PREPARE] = None,
             jobXml: Option[Seq[String]] = None,
-            otherFiles: Option[Seq[String]] = None,
             file: Seq[String] = Nil,
             argument: Seq[String] = Nil,
             archive: Seq[String] = Nil): Job[ACTION] = v0_5(
