@@ -1,16 +1,29 @@
-Soozie
-=======
+# Soozie
 
-Yet another Scala DSL for Oozie
+## Getting Soozie
 
-Why?
-----
+The current *SNAPSHOT* version is 0.6-SNAPSHOT, which is built against 2.12.x.
+
+If you're using SBT, add the following line to your build file:
+
+```
+libraryDependencies += "com.github.izhangzhihao" %% "soozie" % "0.6-SNAPSHOT"
+```
+
+and add sonatype snapshots repo:
+
+```
+resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+```
+
+For Gradle / Maven and other build tools, you can visit [Sonatype OSS Snapshots Repo](https://oss.sonatype.org/content/repositories/snapshots/com/github/izhangzhihao/soozie_2.12/0.6-SNAPSHOT/).
+
+## Why?
 
 Soozie is designed to solve problems concerning developer productivity when creating and running oozie workflow jobs.
 
 
-Problems that Soozie solves:
-----------------------------
+### Problems that Soozie solves:
 
 1. Job hierarchy and re-use: No more copy/pasting XML to create a new job
 2. Type and syntax checking: No more errors from typos in XML
@@ -23,8 +36,7 @@ Problems that Soozie solves:
 5. Multiple sources of truth: The Soozie specification of a job will
    be the source of truth for any workflow
 
-How it works:
--------------
+## How it works:
 
 There are three main layers to Soozie:
 
@@ -58,8 +70,7 @@ There are three main layers to Soozie:
    scala command.
 
 
-DSL Class Structure:
---------------------
+## DSL Class Structure:
 
 Node: Contains work and a list of dependencies. A node is also a dependency.
 
@@ -75,8 +86,7 @@ In practice, each line of developer-specified Soozie code will return a Node, wh
 other Nodes will depend on (Decisions are a special case of this, which will simply
 return a Dependency).
 
-Tutorial:
---------
+## Tutorial:
 
 1. **Hello World!**
 	The following workflow will create an Oozie workflow that will create a Hello World directory on HDFS.
@@ -199,11 +209,10 @@ For example, consider the following workflow:
     More examples of creating runnable Soozie objects can be found in runSamples.scala
 
 
-Additional Help
---------------
+## Additional Help
+
 More example Soozie code can be found in [samples.scala](/src/test/scala/com/github/izhangzhihao/soozie/examples/samples.scala). Available job definitions can be found in [jobs](/src/main/scala/com/github/izhangzhihao/soozie/jobs). Those jobs can be easily extended to fit your specific use cases.
 
-Acknowledgements
---------------
-This project is heavily inspired by [scoozie](https://github.com/glava/scoozie) and [scoozie](https://github.com/QuantiumTechnology/scoozie)
+## Acknowledgements
 
+This project is heavily inspired by [scoozie](https://github.com/klout/scoozie) and [scoozie](https://github.com/QuantiumTechnology/scoozie)
