@@ -1,4 +1,4 @@
-# Soozie
+# Soozie [![Build Status](https://travis-ci.org/izhangzhihao/soozie.svg?branch=master)](https://travis-ci.org/izhangzhihao/soozie) [![](https://img.shields.io/nexus/s/https/oss.sonatype.org/com.github.izhangzhihao/soozie_2.12.svg)](https://oss.sonatype.org/content/repositories/snapshots/com/github/izhangzhihao/soozie_2.12/0.6-SNAPSHOT/)
 
 ## Getting Soozie
 
